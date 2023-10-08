@@ -22,14 +22,20 @@ jobs:
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
-      - name: Install Dart and Flutter
-        run: |
-          brew update
-          brew tap dart-lang/dart
-          brew install dart
-          brew install --cask flutter
+      # - name: Install Dart and Flutter
+      #   run: |
+      #     brew update
+      #     brew tap dart-lang/dart
+      #     brew install dart
+      #     brew install --cask flutter
+
+      - name: Set up Dart and Flutter
+        uses: dart-lang/setup-dart@v3.1
+        with:
+          dart-sdk: stable
+          flutter: latest
 
       - name: Install Flutter dependencies
         run: flutter doctor
