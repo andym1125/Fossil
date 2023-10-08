@@ -32,7 +32,7 @@ jobs:
       #     brew install --cask flutter
 
       - name: Set up Dart and Flutter
-        uses: dart-lang/setup-dart@latest
+        uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
         with:
           dart-sdk: stable
           flutter: latest
