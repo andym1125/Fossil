@@ -42,7 +42,7 @@ cd Fossil
 
 Configure the secrets. Run the following to rename the secrets file:
  ```
- mv secret.json.example secret.json
+ mv secrets.json.example secrets.json
  ```
 Then, fill in the `MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN` with your bearer token.
 
