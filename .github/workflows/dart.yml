@@ -17,9 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        env:
-          MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN: ${{ secrets.MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN }}
-
+        
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
@@ -54,3 +52,6 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: flutter test --dart-define-from-file=env.json
+        env:
+          MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN: ${{ secrets.MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN }}
+
