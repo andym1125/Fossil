@@ -22,7 +22,8 @@ After all this, you can ensure your installation is correct by running `flutter 
 
 You can also verify through flutter --version. It may look something like the following:
 
-```% flutter --version
+```
+% flutter --version
 Flutter 3.13.6 • channel stable • https://github.com/flutter/flutter.git
 Framework • revision ead455963c (12 days ago) • 2023-09-26 18:28:17 -0700
 Engine • revision a794cf2681
@@ -33,19 +34,50 @@ In particular, look for Flutter v3.13.6 and Dart v3.1.3
 
 ## Getting Started
 
-Run the following to get the code, install dependencies, and run.
-
-```git clone https://github.com/andym1125/Fossil
+Download the code locally:
+```
+git clone https://github.com/andym1125/Fossil
 cd Fossil
-flutter pub get
-flutter run
 ```
 
-If you've configured your emulator correctly, it should automatically open your emulator.
+Configure the secrets. Run the following to rename the secrets file:
+ ```
+ mv secrets.json.example secrets.json
+ ```
+Then, fill in the `MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN` with your bearer token.
+
+To install dependencies:
+ ```
+ flutter pub get
+ ```
+
+To run the project, first open your emulator. Then run:
+ ```
+ flutter run --dart-define-from-file=env.json --dart-define-from-file=secrets.json
+ ```
+
+If you've configured your emulator and environment variable properly, it should automatically open your emulator.
+
+## Testing locally
+
+To test locally, run:
+```
+flutter test --dart-define-from-file=env.json --dart-define-from-file=secrets.json
+```
+
+## Explanation of repository
+
+For the most part, this repo follows Flutter project conventions.
+
+### env.json
+This file contains public configuration details which should be included as environment variables.
+
+### secret.json (secret.json.example as the example)
+secret.json is excluded in .gitignore. This file contains secret configurations, such as bearer tokens. For how to configure secret.json, see `Getting Started`
 
 ## Contributing
 
-Develop on a branch named YourName/FeatureName. For example, andy/readme-update. When your branch is ready to review, submit a SQUASH COMMIT pull request. If any available testing fails, you PR will not be approved. Ensure your changes are sufficiently tested. At least one approval is necessary. 
+Develop on a branch named YourName/FeatureName. For example, andy/readme-update. When your branch is ready to review, submit a pull request. If any available testing fails, you PR will not be approved. Ensure your changes are sufficiently tested. At least one approval is necessary. 
 
 
 
