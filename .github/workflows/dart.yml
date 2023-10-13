@@ -51,7 +51,8 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        run: flutter test --dart-define-from-file=env.json
         env:
           MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN: ${{ secrets.MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN }}
+        run: flutter test --dart-define-from-file=env.json
+        
 
