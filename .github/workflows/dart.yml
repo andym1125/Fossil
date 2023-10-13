@@ -53,6 +53,6 @@ jobs:
       - name: Run tests
         env:
           MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN: ${{ secrets.MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN }}
-        run: flutter test --dart-define-from-file=env.json
+        run: flutter test --dart-define-from-file=env.json --dart-define=$MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN
         
 
