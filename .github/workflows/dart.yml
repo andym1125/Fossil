@@ -17,6 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
@@ -50,4 +51,5 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        run: flutter test --dart-define-from-file=env.json
+        run: flutter test --dart-define-from-file=env.json --dart-define=MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN=${{ secrets.MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN }}
+   
