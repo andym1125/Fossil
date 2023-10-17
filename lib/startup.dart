@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
                 width: 295.0,
                 child: ElevatedButton(
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage())
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -72,7 +76,7 @@ class MyApp extends StatelessWidget {
                 width: 295.0,
                 child: ElevatedButton(
                     onPressed: () {
-
+                      // TODO: Route to signup page
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
