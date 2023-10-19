@@ -8,8 +8,14 @@ class Fossil
   bool authenticated = false;
 
   // Constructs a new Fossil backend instance based on environmental configuration
-  Fossil()
+  Fossil([MastodonApi? replaceApi])
   {
+    if(replaceApi != null)
+    {
+      mastodon = replaceApi;
+      return;
+    }
+
     mastodon = MastodonApi(
       instance: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN'),
       bearerToken: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN'),
