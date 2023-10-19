@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'signup.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -82,7 +83,10 @@ class MyApp extends StatelessWidget {
                         width: 295.0,
                         child: ElevatedButton(
                             onPressed: () {
-                              // TODO: Route to signup page
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const SignupPageState())
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
