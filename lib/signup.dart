@@ -112,9 +112,9 @@ class _SignupPageState extends State<SignupPageState> {
               width: 370.0,
               child: ElevatedButton(
                   onPressed: () async {
-                    var username = userName.text;
-                    var email = emailAddress;
-                    var password = password1.text;
+                    //var username = userName.text;
+                    //var email = emailAddress;
+                    //var password = password1.text;
 
                     // TODO: uncomment below line
                     //HttpStatus status = await fossil.createAccount(username, email, password);
