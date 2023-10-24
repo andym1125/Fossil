@@ -14,7 +14,8 @@ void main() {
   test('Create an account', () async {
 
     var accountsApi = MockAccountsV1Service();
-    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const Locale(lang: Language.americanEnglish, country: Country.unitedStates))).thenAnswer((realInvocation) => Future.value(
+    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const Locale(lang: Language.americanEnglish, country: Country.unitedStates)))
+    .thenAnswer((realInvocation) => Future.value(
       MastodonResponse<Token>(
         data: Token(
           accessToken: "accessToken", 
