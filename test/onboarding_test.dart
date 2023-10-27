@@ -38,6 +38,48 @@ void main() {
     expect(await fossil.createAccount("", "", ""), HttpStatus.ok);
   });
 
+  test('Creating an account when the Mastodon API is unavailable', () async {
+
+    var accountsApi = MockAccountsV1Service();
+    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const Locale(lang: Language.americanEnglish, country: Country.unitedStates)))
+    .thenThrow(Exception());
+
+    var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+    var fossil = Fossil(mastodon);
+
+    // Expect the createAccount() method to throw an exception when the Mastodon API is unavailable.
+    expect(() async => await fossil.createAccount("", "", ""), throwsException);
+  });
+
+  test('Creating an account with invalid input throws an exception', () async {
+
+    var accountsApi = MockAccountsV1ServiceWithInvalidInputStub();
+    var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+    var fossil = Fossil(mastodon);
+
+    // Expect the createAccount() method to throw an exception when invalid input is provided.
+    expect(() async => await fossil.createAccount("", "", ""), throwsException);
+  });
+
+  test('Creating an account with invalid email throws an exception', () async {
+
+    var accountsApi = MockAccountsV1ServiceWithInvalidEmailStub();
+    
+    var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+    var fossil = Fossil(mastodon);
+
+    // Expect the createAccount() method to throw an exception when an invalid email address is provided.
+    expect(() async => await fossil.createAccount("username", "invalid_email", "password"), throwsException);
+  });
+
+  test('Creating an account with an invalid password throws an exception', () async {
+  var accountsApi = MockAccountsV1ServiceWithInvalidPasswordStub();
+  var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+  var fossil = Fossil(mastodon);
+
+  // Expect the createAccount() method to throw an exception when an invalid password is provided.
+  expect(() async => await fossil.createAccount("username", "email@example.com", "short"), throwsException);
+});
   test('Accessing environment variable secrets', () {
   });
 
