@@ -50,7 +50,7 @@ void main() {
     // Expect the createAccount() method to throw an exception when the Mastodon API is unavailable.
     expect(() async => await fossil.createAccount("", "", ""), throwsException);
   });
-
+  
   test('Creating an account with invalid input throws an exception', () async {
 
     var accountsApi = MockAccountsV1ServiceWithInvalidInputStub();
@@ -79,6 +79,15 @@ void main() {
 
   // Expect the createAccount() method to throw an exception when an invalid password is provided.
   expect(() async => await fossil.createAccount("username", "email@example.com", "short"), throwsException);
+});
+
+test('Creating an account with an existing email address throws an exception', () async {
+  var accountsApi = MockAccountsV1ServiceWithExistingEmailStub();
+  var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+  var fossil = Fossil(mastodon);
+
+  // Expect the createAccount() method to throw an exception when an existing email address is provided.
+  expect(() async => await fossil.createAccount("username", "existing_email@example.com", "password"), throwsException);
 });
   test('Accessing environment variable secrets', () {
   });

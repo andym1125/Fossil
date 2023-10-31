@@ -135,4 +135,41 @@ class MockAccountsV1ServiceWithInvalidPasswordStub extends Mock implements Accou
   }
 }
 
+class MockAccountsV1ServiceWithExistingEmailStub extends Mock implements AccountsV1Service {
+
+  @override
+  Future<MastodonResponse<Token>> createAccount({
+    required String username,
+    required String email,
+    required String password,
+    bool agreement = true,
+    required Locale locale,
+    String? reason,
+  }) async {
+    if (email == "existing_email@example.com") {
+      throw Exception("Email address already in use");
+    }
+
+    return Future.value(MastodonResponse<Token>(
+      headers: {},
+      status: HttpStatus.ok,
+      request: MastodonRequest(
+        method: HttpMethod.post,
+        url: Uri.parse("https://example.com/api/v1/accounts"),
+      ),
+      rateLimit: RateLimit(
+        limitCount: 100,
+        remainingCount: 100,
+        resetAt: DateTime.now(),
+      ),
+      data: Token(
+        accessToken: "",
+        tokenType: "",
+        scopes: List<Scope>.empty(),
+        createdAt: DateTime.now(),
+      ),
+    ));
+  }
+}
+
 //class MockAccountsV1Service extends Mock implements AccountsV1Service {}
