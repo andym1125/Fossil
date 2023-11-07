@@ -1,3 +1,4 @@
+import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart';
 
 class Fossil
@@ -47,13 +48,26 @@ class Fossil
       email: email, 
       password: password, 
       agreement: true, 
-      locale: const Locale(lang: Language.english, country: Country.unitedStates)
+      locale: DEFAULT_LOCALE
     ); 
 
     authToken = response.data;
-    print((Locale(lang: Language.english, country: Country.unitedStates)).toString());
     return response.status;
   }
+
+  // Future<HttpStatus> authAccount(String email, String password) async
+  // {
+
+  //   mastodon.v1.apps.
+  //   var response = await mastodon.v1.accounts.(
+  //     username: email, 
+  //     password: password, 
+  //     locale: DEFAULT_LOCALE
+  //   );
+
+  //   authToken = response.data;
+  //   return response.status;
+  // }
 
   /// verifyAccount returns:<br/>
   /// - ok if the user's email has been verified<br/>
