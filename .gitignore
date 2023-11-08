@@ -10,6 +10,8 @@
 .svn/
 migrate_working_dir/
 secrets.json
+.vscode/
+.vscode/*
 
 # IntelliJ related
 *.iml
@@ -43,3 +45,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+coverage/lcov.info
+secret.json.example
+secret.json.example
