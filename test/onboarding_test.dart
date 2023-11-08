@@ -89,6 +89,9 @@ test('Creating an account with an existing email address throws an exception', (
   // Expect the createAccount() method to throw an exception when an existing email address is provided.
   expect(() async => await fossil.createAccount("username", "existing_email@example.com", "password"), throwsException);
 });
+
+
+
   test('Accessing environment variable secrets', () {
   });
 

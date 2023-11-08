@@ -1,5 +1,7 @@
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mockito/mockito.dart';
+import 'dart:io';
+
 
 class MockMastodonApi extends Fake implements MastodonApi {
   /// Returns the new instance of [_MastodonApi].
@@ -171,5 +173,61 @@ class MockAccountsV1ServiceWithExistingEmailStub extends Mock implements Account
     ));
   }
 }
+
+// bool isEmailVerified(String email) {
+//   // Open the CSV file for reading.
+//   final file = File('verificationEmail.csv');
+  
+//   try {
+//     final lines = file.readAsLinesSync();
+    
+//     // Iterate over the lines and check if the email address is in the file.
+//     for (final line in lines) {
+//       if (line == email) {
+//         return true;
+//       }
+//     }
+//   } catch (e) {
+//     print('Error reading the file: $e');
+//   }
+
+//   return false;
+// }
+// class MockAccountsV1ServiceWithVerifiedEmailStub extends Mock implements AccountsV1Service {
+
+//   @override
+//   Future<MastodonResponse<Token>> createAccount({
+//     required String username, 
+//     required String email, 
+//     required String password, 
+//     bool agreement = true, 
+//     Locale locale = const Locale(lang: Language.americanEnglish, country: Country.unitedStates), 
+//     String? reason
+//     }) async {
+//     if (!isEmailVerified(email)) {
+//       throw Exception("Email address is not verified");
+//     }
+
+//     return Future.value(MastodonResponse<Token>(
+//       headers: {},
+//       status: HttpStatus.ok,
+//       request: MastodonRequest(
+//         method: HttpMethod.post,
+//         url: Uri.parse("https://example.com/api/v1/accounts"),
+//       ),
+//       rateLimit: RateLimit(
+//         limitCount: 100,
+//         remainingCount: 100,
+//         resetAt: DateTime.now(),
+//       ),
+//       data: Token(
+//         accessToken: "",
+//         tokenType: "",
+//         scopes: List<Scope>.empty(),
+//         createdAt: DateTime.now(),
+//       ),
+//     ));
+//   }
+// }
 
 //class MockAccountsV1Service extends Mock implements AccountsV1Service {}
