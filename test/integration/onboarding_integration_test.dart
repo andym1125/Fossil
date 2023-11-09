@@ -5,6 +5,6 @@ import 'package:mastodon_api/mastodon_api.dart';
 void main() {
   test('Create an account', () async {
     var fossil = Fossil();
-    expect(await fossil.createAccount("andy3952922334410", "20ia1w5tb10@duck.com", "!1Asdfgh4jkl"), HttpStatus.ok);
+    expect(await fossil.createAccount("aaaa4", "aaaa4@andymcdowall.com", "!1Asdfgh4jkl"), HttpStatus.ok);
   });
 } 
