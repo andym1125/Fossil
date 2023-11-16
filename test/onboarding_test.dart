@@ -3,6 +3,7 @@ import 'package:fossil/fossil.dart';
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:fossil/lib_override/lib_override.dart';
 
 import 'mock/MockMastodonApi.dart';
 
@@ -14,7 +15,7 @@ void main() {
   test('Create an account', () async {
 
     var accountsApi = MockAccountsV1Service();
-    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const Locale(lang: Language.americanEnglish, country: Country.unitedStates)))
+    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const MyLocale(lang: Language.english, country: Country.unitedStates)))
     .thenAnswer((realInvocation) => Future.value(
       MastodonResponse<Token>(
         data: Token(
