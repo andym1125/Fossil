@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mockito/mockito.dart';
 

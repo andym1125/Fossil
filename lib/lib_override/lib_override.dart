@@ -1,3 +1,6 @@
+// ignore_for_file: overridden_fields
+//TODO: ^
+
 import 'package:mastodon_api/mastodon_api.dart';
 
 // TODO: Check if this is the correct way to do this
@@ -10,7 +13,9 @@ class MyLocale extends Locale {
     required this.country,
   }) : super(lang: lang, country: country);
 
+  @override
   final Language lang;
+  @override
   final Country country;
 
   @override

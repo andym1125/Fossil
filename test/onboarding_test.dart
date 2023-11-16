@@ -23,7 +23,7 @@ void main() {
           tokenType: "tokenType", 
           scopes: List<Scope>.empty(), 
           createdAt: DateTime.now()), 
-        headers: Map(), 
+        headers: <String, String>{}, 
         status: HttpStatus.ok, 
         request: MastodonRequest(
           method: HttpMethod.get,

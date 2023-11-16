@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print
+// TODO ^
+
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart';
 
@@ -86,8 +89,6 @@ class Fossil
       response = await mastodon.v1.accounts.verifyAccountCredentials(bearerToken: authToken!.toString());
     } catch (e) {
       if (e.toString().contains('email needs to be confirmed')) {
-        // ignore: avoid_print
-        //TODO
         print('Email is not verified');
         return HttpStatus.forbidden;
       } else {
