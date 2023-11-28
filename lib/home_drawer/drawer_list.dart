@@ -6,7 +6,6 @@ import 'favorites.dart';
 import 'mentions.dart';
 import 'notifications.dart';
 import 'search.dart';
-import 'settings.dart';
 // import 'package:fossil/home_navbar/profile_page.dart';
 
 class DrawerColumn extends StatelessWidget{
@@ -26,7 +25,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -41,7 +40,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingPage())
+              MaterialPageRoute(builder: (context) => const SettingPage())
             );
           },
           child: const Row(
@@ -54,7 +53,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -69,7 +68,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MentionsPage())
+              MaterialPageRoute(builder: (context) => const MentionsPage())
             );
           },
           child: const Row(
@@ -91,7 +90,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -106,7 +105,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FavoritesPage())
+              MaterialPageRoute(builder: (context) => const FavoritesPage())
             );
           },
           child: const Row(
@@ -119,7 +118,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -134,7 +133,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NotificationPage())
+              MaterialPageRoute(builder: (context) => const NotificationPage())
             );
           },
           child: const Row(
@@ -147,7 +146,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -162,7 +161,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SearchPage())
+              MaterialPageRoute(builder: (context) => const SearchPage())
             );
           },
           child: const Row(
@@ -175,7 +174,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
@@ -190,7 +189,7 @@ class DrawerColumn extends StatelessWidget{
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AccessibilityPage())
+              MaterialPageRoute(builder: (context) => const AccessibilityPage())
             );
           },
           child: const Row(
@@ -203,7 +202,7 @@ class DrawerColumn extends StatelessWidget{
         ),
 
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           color: Colors.deepPurpleAccent,
           width: 300.0,
           height: 2.0,
