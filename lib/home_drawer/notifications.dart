@@ -8,7 +8,7 @@ class NotificationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifications Page'),
-        backgroundColor: Color(0xFF8F87EC)
+        backgroundColor: const Color(0xFF8F87EC)
       ),
     );
   }

@@ -115,7 +115,7 @@ class TootCard extends StatefulWidget {
   const TootCard({required this.toot, Key? key}) : super(key: key);
 
   @override
-  _TootCardState createState() => _TootCardState();
+  State<TootCard> createState() => _TootCardState();
 }
 
 class _TootCardState extends State<TootCard> {
@@ -135,7 +135,7 @@ class _TootCardState extends State<TootCard> {
                   backgroundColor: Colors.blue,
                   child: Icon(Icons.person, color: Colors.white),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -148,7 +148,7 @@ class _TootCardState extends State<TootCard> {
                     ),
                     Text(
                       widget.toot.username,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                       ),
                     ),
@@ -159,13 +159,13 @@ class _TootCardState extends State<TootCard> {
             const SizedBox(height: 8),
             Text(
               widget.toot.text,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.comment, color: Colors.black26),
                     SizedBox(width: 4),
@@ -180,14 +180,14 @@ class _TootCardState extends State<TootCard> {
                   },
                   child: Row(
                     children: [
-                      Icon(Icons.favorite, color: Colors.black26), // Change to filled heart icon
-                      SizedBox(width: 4),
+                      const Icon(Icons.favorite, color: Colors.black26), // Change to filled heart icon
+                      const SizedBox(width: 4),
                       Text(widget.toot.likeCount.toString()), // Display the like count
                     ],
                   ),
                 ),
-                Icon(Icons.cached, color: Colors.black26),
-                Icon(Icons.ios_share, color: Colors.black26),
+                const Icon(Icons.cached, color: Colors.black26),
+                const Icon(Icons.ios_share, color: Colors.black26),
               ],
             ),
           ],

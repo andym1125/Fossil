@@ -39,7 +39,7 @@ class _ViewListState extends State<ViewList> {
                   Icons.public, 
                   color: Color(0xFF8134AF)
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   value,
                   style: const TextStyle(

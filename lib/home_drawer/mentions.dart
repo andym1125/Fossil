@@ -8,7 +8,7 @@ class MentionsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mentions Page'),
-        backgroundColor: Color(0xFF8F87EC)
+        backgroundColor: const Color(0xFF8F87EC)
       ),
     );
   }
