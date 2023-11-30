@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fossil/home.dart';
 //import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 // TODO: uncomment below line
-//import 'fossi.dart';
+import 'fossil.dart';
+//import 'dart:io';
+import 'package:mastodon_api/mastodon_api.dart';
 
 class SignupPageState extends StatefulWidget {
   const SignupPageState({super.key});
@@ -16,7 +19,7 @@ class _SignupPageState extends State<SignupPageState> {
   final TextEditingController password1 = TextEditingController();
   final TextEditingController password2 = TextEditingController();
   String errorText = '';
-  //Fossil fossil = Fossil();
+  var fossil = Fossil();
 
   @override
   Widget build(BuildContext context) {
@@ -112,15 +115,20 @@ class _SignupPageState extends State<SignupPageState> {
               width: 370.0,
               child: ElevatedButton(
                   onPressed: () async {
-                    //var username = userName.text;
-                    //var email = emailAddress;
-                    //var password = password1.text;
+                    String username = userName.text;
+                    String email = emailAddress.text;
+                    String password = password1.text;
 
                     // TODO: uncomment below line
-                    //HttpStatus status = await fossil.createAccount(username, email, password);
                     if (password1.text == password2.text) {
+                      setState(() {
+                        errorText = 'Passwords do match';
+                      });
+                
                       // TODO: uncomment below block of code
-                      /*
+                      //print('Test');
+                      var status = await fossil.createAccount(username, email, password);
+                      //print(status);
                       if (status == HttpStatus.ok) {
                         setState(() {
                           errorText = 'Account creating was successful';
@@ -130,12 +138,15 @@ class _SignupPageState extends State<SignupPageState> {
                         setState(() {
                           errorText = 'Account creating failed';
                         });
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage())
+                          );
+                        });
                       }
-                      */
+                      
                       // TODO: comment out below block of code
-                      setState(() {
-                        errorText = 'Passwords match';
-                      });
                     }
                     else {
                       setState(() {

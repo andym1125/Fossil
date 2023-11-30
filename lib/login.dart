@@ -93,8 +93,8 @@ class _LoginPageStateState extends State<LoginPageState> {
 
           // Text for debugging purpose
           // TODO: Remove this in future
-          Text('Entered username: $user'),
-          Text('Entered password: $pass'),
+          // Text('Entered username: $user'),
+          // Text('Entered password: $pass'),
 
           // next Button
           // TODO: Need to verify the username and password
