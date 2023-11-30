@@ -133,16 +133,16 @@ class _SignupPageState extends State<SignupPageState> {
                         setState(() {
                           errorText = 'Account creating was successful';
                         });
-                      }
-                      else {
-                        setState(() {
-                          errorText = 'Account creating failed';
-                        });
                         Future.delayed(Duration.zero, () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const HomePage())
                           );
+                        });
+                      }
+                      else {
+                        setState(() {
+                          errorText = 'Account creating failed';
                         });
                       }
                       
