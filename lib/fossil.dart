@@ -2,17 +2,18 @@
 // TODO ^
 
 import 'package:fossil/lib_override/lib_override.dart';
-import 'package:mastodon_api/mastodon_api.dart';
+import 'package:mastodon_api/mastodon_api.dart' as m;
+import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 
 class Fossil
 {
-  late MastodonApi mastodon;
-  Token? authToken;
+  late m.MastodonApi mastodon;
+  m.Token? authToken;
 
   bool authenticated = false;
 
   // Constructs a new Fossil backend instance based on environmental configuration
-  Fossil([MastodonApi? replaceApi])
+  Fossil([m.MastodonApi? replaceApi])
   {
     if(replaceApi != null)
     {
@@ -20,15 +21,15 @@ class Fossil
       return;
     }
 
-    mastodon = MastodonApi(
+    mastodon = m.MastodonApi(
       instance: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN'),
       bearerToken: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN'),
 
       //! Automatic retry is available when server error or network error occurs
       //! when communicating with the API.
-      retryConfig: RetryConfig(
+      retryConfig: m.RetryConfig(
         maxAttempts: 5,
-        jitter: Jitter(
+        jitter: m.Jitter(
           minInSeconds: 2,
           maxInSeconds: 5,
         ),
@@ -44,7 +45,7 @@ class Fossil
 
   }
 
-  Future<HttpStatus> createAccount(String username, String email, String password) async
+  Future<m.HttpStatus> createAccount(String username, String email, String password) async
   {
     var response = await mastodon.v1.accounts.createAccount(
       username: username, 
@@ -58,46 +59,69 @@ class Fossil
     return response.status;
   }
 
-  // Future<HttpStatus> authAccount(String email, String password) async
-  // {
+  Future<m.HttpStatus> authAccount(String email, String password) async
+  {
+    var instanceDomain = const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN');
+    final oauth2 = oauth.MastodonOAuth2Client(
+      // Specify mastodon instance like "mastodon.social"
+      instance: instanceDomain,
+      clientId: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_ID'),
+      clientSecret: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_SECRET'),
 
-  //   mastodon.v1.apps.
-  //   var response = await mastodon.v1.accounts.(
-  //     username: email, 
-  //     password: password, 
-  //     locale: DEFAULT_LOCALE
-  //   );
+      // Replace redirect url as you need.
+      redirectUri: 'com.example.fossil://callback',
+      customUriScheme: 'com.example.fossil',
+    );
 
-  //   authToken = response.data;
-  //   return response.status;
-  // }
+    final response = await oauth2.executeAuthCodeFlow(
+      scopes: [
+        oauth.Scope.read,
+        oauth.Scope.write,
+      ],
+    );
+
+    authToken = m.Token(
+      accessToken: response.accessToken, 
+      tokenType: response.tokenType,
+      scopes: [
+        m.Scope.read,
+        m.Scope.write,
+      ],
+      createdAt: response.createdAt
+    );
+    
+    //TODO Look into how to use status
+    authenticated =  response.accessToken != "";
+    var status = response.accessToken != "" ? m.HttpStatus.ok : m.HttpStatus.unauthorized;
+    return status;
+  }
 
   /// verifyAccount returns:<br/>
   /// - ok if the user's email has been verified<br/>
   /// - unauthorized if the user authToken hasn't been intialized<br/>
   /// - forbidden if the user's email hasn't been verified<br/>
   /// - other messages if an error occurs, see Mastodon API<br/>
-  Future<HttpStatus> verifyAccount() async
+  Future<m.HttpStatus> verifyAccount() async
   {
     if(authToken == null)
     {
-      return HttpStatus.unauthorized;
+      return m.HttpStatus.unauthorized;
     }
 
-    late MastodonResponse<Account> response;
+    late m.MastodonResponse<m.Account> response;
     try {
       response = await mastodon.v1.accounts.verifyAccountCredentials(bearerToken: authToken!.toString());
     } catch (e) {
       if (e.toString().contains('email needs to be confirmed')) {
         print('Email is not verified');
-        return HttpStatus.forbidden;
+        return m.HttpStatus.forbidden;
       } else {
         print('An error occurred: $e');
         return response.status;
       }
     }
 
-    authenticated = response.status == HttpStatus.ok;
+    authenticated = response.status == m.HttpStatus.ok;
     return response.status;
   }
 }

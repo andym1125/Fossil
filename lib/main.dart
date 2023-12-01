@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:fossil/fossil.dart';
 import 'login.dart';
 import 'signup.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
     home: MyApp(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
 
+
+
+  @override
+  State<MyApp> createState() => _YourWidgetState();
+
+
+}
+class _YourWidgetState extends State<MyApp> {
+
+    String? _accessToken;
   @override
   Widget build(BuildContext context) {
 
@@ -54,11 +65,12 @@ class MyApp extends StatelessWidget {
                       height: 48.0,
                       width: 295.0,
                       child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginPageState())
-                            );
+                          onPressed: () async {
+                            var fossil = Fossil();
+                              await fossil.authAccount("email", "password");
+                              super.setState(() {
+                                _accessToken = fossil.authToken?.accessToken;
+                              });
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -77,6 +89,8 @@ class MyApp extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 44.0),
+                    Text('Access Token: $_accessToken'),
+
                     // Sign Up button
                     SizedBox(
                         height: 48.0,
@@ -110,4 +124,5 @@ class MyApp extends StatelessWidget {
         )
     );
   }
+  
 }
