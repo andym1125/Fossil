@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
-import 'login.dart';
 import 'signup.dart';
 
 void main() {
@@ -67,7 +66,7 @@ class _YourWidgetState extends State<MyApp> {
                       child: ElevatedButton(
                           onPressed: () async {
                             var fossil = Fossil();
-                              await fossil.authAccount("email", "password");
+                              await fossil.authAccount();
                               super.setState(() {
                                 _accessToken = fossil.authToken?.accessToken;
                               });

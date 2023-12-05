@@ -59,7 +59,7 @@ class Fossil
     return response.status;
   }
 
-  Future<m.HttpStatus> authAccount(String email, String password) async
+  Future<m.HttpStatus> authAccount() async
   {
     var instanceDomain = const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN');
     final oauth2 = oauth.MastodonOAuth2Client(
