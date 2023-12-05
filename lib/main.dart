@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:fossil/fossil.dart';
+import 'package:fossil/home.dart';
 import 'signup.dart';
 
 void main() {
@@ -8,9 +9,19 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+
+
+  @override
+  State<MyApp> createState() => _YourWidgetState();
+
+
+}
+class _YourWidgetState extends State<MyApp> {
+
+    String? _accessToken;
   @override
   Widget build(BuildContext context) {
 
@@ -54,11 +65,18 @@ class MyApp extends StatelessWidget {
                       height: 48.0,
                       width: 295.0,
                       child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginPageState())
-                            );
+                          onPressed: () async {
+                            var fossil = Fossil();
+                              await fossil.authAccount();
+                              super.setState(() {
+                                _accessToken = fossil.authToken?.accessToken;
+                              });
+                              if (_accessToken != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const HomePage())
+                                );
+                              }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -77,6 +95,8 @@ class MyApp extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 44.0),
+                    Text('Access Token: $_accessToken'),
+
                     // Sign Up button
                     SizedBox(
                         height: 48.0,
@@ -110,4 +130,5 @@ class MyApp extends StatelessWidget {
         )
     );
   }
+  
 }
