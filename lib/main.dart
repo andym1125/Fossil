@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
+import 'package:fossil/home.dart';
 import 'signup.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
 
 
@@ -70,6 +71,12 @@ class _YourWidgetState extends State<MyApp> {
                               super.setState(() {
                                 _accessToken = fossil.authToken?.accessToken;
                               });
+                              if (_accessToken != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const HomePage())
+                                );
+                              }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

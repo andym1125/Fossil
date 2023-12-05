@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
-//import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-// TODO: uncomment below line
 import 'fossil.dart';
-//import 'dart:io';
 import 'package:mastodon_api/mastodon_api.dart';
 
 class SignupPageState extends StatefulWidget {
@@ -119,34 +116,25 @@ class _SignupPageState extends State<SignupPageState> {
                     String email = emailAddress.text;
                     String password = password1.text;
 
-                    // TODO: uncomment below line
                     if (password1.text == password2.text) {
-                      setState(() {
-                        errorText = 'Passwords do match';
-                      });
-                
-                      // TODO: uncomment below block of code
-                      //print('Test');
+
                       var status = await fossil.createAccount(username, email, password);
-                      //print(status);
                       if (status == HttpStatus.ok) {
                         setState(() {
                           errorText = 'Account creating was successful';
+                        });
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HomePage())
+                          );
                         });
                       }
                       else {
                         setState(() {
                           errorText = 'Account creating failed';
                         });
-                        Future.delayed(Duration.zero, () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomePage())
-                          );
-                        });
                       }
-                      
-                      // TODO: comment out below block of code
                     }
                     else {
                       setState(() {
