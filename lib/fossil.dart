@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 // TODO ^
 
+import 'package:flutter/material.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
@@ -103,25 +104,26 @@ class Fossil
   /// - other messages if an error occurs, see Mastodon API<br/>
   Future<m.HttpStatus> verifyAccount() async
   {
-    if(authToken == null)
+    debugPrint('-----\$ verify account initialized');
+    if(authToken == null || authToken.toString() == "")
     {
-      return m.HttpStatus.unauthorized;
+      return m.HttpStatus.forbidden;
     }
+    var stringAuth = authToken.toString();
+    debugPrint('-----\$ $stringAuth');
 
     late m.MastodonResponse<m.Account> response;
     try {
-      response = await mastodon.v1.accounts.verifyAccountCredentials(bearerToken: authToken!.toString());
+      response = await mastodon.v1.accounts.verifyAccountCredentials(bearerToken: authToken!.accessToken);
     } catch (e) {
       if (e.toString().contains('email needs to be confirmed')) {
         print('Email is not verified');
         return m.HttpStatus.forbidden;
       } else {
         print('An error occurred: $e');
-        return response.status;
+        return m.HttpStatus.unauthorized;
       }
     }
-
-    authenticated = response.status == m.HttpStatus.ok;
     return response.status;
   }
 }

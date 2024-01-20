@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
 import 'fossil.dart';
@@ -116,31 +118,42 @@ class _SignupPageState extends State<SignupPageState> {
                     String email = emailAddress.text;
                     String password = password1.text;
 
-                    if (password1.text == password2.text) {
-
-                      var status = await fossil.createAccount(username, email, password);
-                      if (status == HttpStatus.ok) {
-                        setState(() {
-                          errorText = 'Account creating was successful';
-                        });
-                        Future.delayed(Duration.zero, () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const HomePage())
-                          );
-                        });
-                      }
-                      else {
-                        setState(() {
-                          errorText = 'Account creating failed';
-                        });
-                      }
-                    }
-                    else {
+                    if(password1.text != password2.text) {
                       setState(() {
                         errorText = 'Passwords do not match';
                       });
+                      return;
                     }
+
+                    var status = await fossil.createAccount(username, email, password);
+                    if(status != HttpStatus.ok) {
+                      setState(() {
+                        errorText = 'Account creating failed';
+                      });
+                      return;
+                    }
+
+                    debugPrint('----- sent verification email');
+
+                    var waitCount = 1;
+                    var completed = (await fossil.verifyAccount()) != HttpStatus.ok;
+                    while(completed) {
+                      completed = (await fossil.verifyAccount()) != HttpStatus.ok;
+                      waitCount++;
+                      debugPrint('----- Waiting $waitCount');
+                      await Future.delayed(const Duration(seconds: 1));
+                    }
+                    
+                    setState(() {
+                      errorText = 'Verification was successful';
+                    });
+
+                    await Future.delayed(Duration.zero, () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage())
+                      );
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
