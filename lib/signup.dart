@@ -1,9 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
-//import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-// TODO: uncomment below line
 import 'fossil.dart';
-//import 'dart:io';
 import 'package:mastodon_api/mastodon_api.dart';
 
 class SignupPageState extends StatefulWidget {
@@ -119,40 +118,42 @@ class _SignupPageState extends State<SignupPageState> {
                     String email = emailAddress.text;
                     String password = password1.text;
 
-                    // TODO: uncomment below line
-                    if (password1.text == password2.text) {
-                      setState(() {
-                        errorText = 'Passwords do match';
-                      });
-                
-                      // TODO: uncomment below block of code
-                      //print('Test');
-                      var status = await fossil.createAccount(username, email, password);
-                      //print(status);
-                      if (status == HttpStatus.ok) {
-                        setState(() {
-                          errorText = 'Account creating was successful';
-                        });
-                      }
-                      else {
-                        setState(() {
-                          errorText = 'Account creating failed';
-                        });
-                        Future.delayed(Duration.zero, () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomePage())
-                          );
-                        });
-                      }
-                      
-                      // TODO: comment out below block of code
-                    }
-                    else {
+                    if(password1.text != password2.text) {
                       setState(() {
                         errorText = 'Passwords do not match';
                       });
+                      return;
                     }
+
+                    var status = await fossil.createAccount(username, email, password);
+                    if(status != HttpStatus.ok) {
+                      setState(() {
+                        errorText = 'Account creating failed';
+                      });
+                      return;
+                    }
+
+                    debugPrint('----- sent verification email');
+
+                    var waitCount = 1;
+                    var completed = (await fossil.verifyAccount()) != HttpStatus.ok;
+                    while(completed) {
+                      completed = (await fossil.verifyAccount()) != HttpStatus.ok;
+                      waitCount++;
+                      debugPrint('----- Waiting $waitCount');
+                      await Future.delayed(const Duration(seconds: 1));
+                    }
+                    
+                    setState(() {
+                      errorText = 'Verification was successful';
+                    });
+
+                    await Future.delayed(Duration.zero, () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage())
+                      );
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
