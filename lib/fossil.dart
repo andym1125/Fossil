@@ -104,26 +104,23 @@ class Fossil
   /// - other messages if an error occurs, see Mastodon API<br/>
   Future<m.HttpStatus> verifyAccount() async
   {
-    debugPrint('-----\$ verify account initialized');
     if(authToken == null || authToken.toString() == "")
     {
       return m.HttpStatus.forbidden;
     }
-    var stringAuth = authToken.toString();
-    debugPrint('-----\$ $stringAuth');
-
+    
     late m.MastodonResponse<m.Account> response;
     try {
       response = await mastodon.v1.accounts.verifyAccountCredentials(bearerToken: authToken!.accessToken);
     } catch (e) {
-      if (e.toString().contains('email needs to be confirmed')) {
-        print('Email is not verified');
-        return m.HttpStatus.forbidden;
-      } else {
-        print('An error occurred: $e');
-        return m.HttpStatus.unauthorized;
-      }
+      debugPrint('An error occurred: $e');
+      return m.HttpStatus.unauthorized;
     }
     return response.status;
   }
+
+  //if auth is null
+  //if auth is empty string
+  //if call returns a error response
+  //if call returns a happy path
 }
