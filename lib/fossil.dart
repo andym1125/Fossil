@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
+import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 
 class Fossil
@@ -117,6 +118,26 @@ class Fossil
       return m.HttpStatus.unauthorized;
     }
     return response.status;
+  }
+
+  Future<List<Status>> getPublicTimeline() async
+  {
+    if(!authenticated)
+      return List.empty();
+    
+    late List<Status> statuses;
+    try {
+      var response = await mastodon.v1.timelines.lookupPublicTimeline();
+
+      //error handling non 200
+
+      statuses = response.data;
+    } catch (e)
+    {
+      //do some error handling
+    }
+
+    return statuses;
   }
 
   //if auth is null

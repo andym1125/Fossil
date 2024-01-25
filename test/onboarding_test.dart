@@ -93,7 +93,18 @@ void main() {
       accounts: accountsApi);
     var fossil = Fossil(mastodon);
     fossil.authToken = Token(accessToken: 'sdsds', tokenType: 'dfdf', scopes: List<Scope>.empty(), createdAt: DateTime.now());
+
+    var response = await fossil.verifyAccount();
+
+    expect(response, HttpStatus.ok);
   });
+
+  // test('auth account status ok', () async{
+
+  //   var accountsApi = MockAccountsV1Service();
+  //   when(accountsApi.authAccount(bearerToken: anyNamed('bearerToken')))
+  //   .thenAnswer((realInvocation) => )
+  // });
 
   test('Create an account', () async {
 

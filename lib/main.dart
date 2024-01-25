@@ -72,6 +72,10 @@ class _YourWidgetState extends State<MyApp> {
                                 _accessToken = fossil.authToken?.accessToken;
                               });
                               if (_accessToken != null) {
+
+                                //TODO: REMOVE
+                                debugPrint((await fossil.getPublicTimeline()).toString());
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => const HomePage())
