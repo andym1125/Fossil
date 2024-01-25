@@ -73,6 +73,7 @@ class _YourWidgetState extends State<MyApp> {
                               });
                               if (_accessToken != null) {
 
+                                debugPrint(fossil.authToken?.toJson().toString());
                                 //TODO: REMOVE
                                 debugPrint((await fossil.getPublicTimeline()).toString());
 
