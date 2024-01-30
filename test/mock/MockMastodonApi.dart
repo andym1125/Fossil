@@ -18,6 +18,20 @@ class MockMastodonApi extends Fake implements MastodonApi {
   final MastodonV1Service v1;
 }
 
+MockMastodonApi makeMockMastodonApi({
+  String? instance,
+  String? bearerToken,
+  Duration? timeout,
+  RetryConfig? retryConfig,
+  AccountsV1Service? accounts,
+}) => MockMastodonApi(
+  instance: "mock.fossil.com",
+  bearerToken: bearerToken ?? "dsgsdfsdf",
+  timeout: const Duration(seconds: 10),
+  retryConfig: retryConfig,
+  accounts: accounts
+);
+
 class MockMastodonV1Service extends Fake implements MastodonV1Service {
   MockMastodonV1Service({
     AccountsV1Service? accountsp
