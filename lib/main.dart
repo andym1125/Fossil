@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
-import 'package:fossil/home.dart';
+//import 'package:fossil/home.dart';
 import 'signup.dart';
 
 void main() {
@@ -72,10 +72,16 @@ class _YourWidgetState extends State<MyApp> {
                                 _accessToken = fossil.authToken?.accessToken;
                               });
                               if (_accessToken != null) {
+                                await Future.delayed(const Duration(seconds: 1));
+
+                                if (!context.mounted) return;
+                                Navigator.of(context).pushNamed('/home');
+                                /*
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => const HomePage())
                                 );
+                                */
                               }
                           },
                           style: ElevatedButton.styleFrom(
