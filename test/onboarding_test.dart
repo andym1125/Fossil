@@ -128,8 +128,14 @@ void main() {
           remainingCount: 5, 
           resetAt: DateTime.now()))));
 
-    var mastodon = MockMastodonApi(instance: "sdfsdf", bearerToken: "bearerToken", timeout: Duration.zero, accounts: accountsApi);
+    var mastodon = MockMastodonApi(
+      instance: "mastadon.fossil.com", 
+      bearerToken: 'GE9gBS0F6x6c1V2MMMC2hGh7ntdsms97FirCK4TQy78', 
+      timeout: Duration.zero,
+      accounts: accountsApi);
     var fossil = Fossil(mastodon);
+    fossil.authToken = Token(accessToken: 'sdsds', tokenType: 'dfdf', scopes: List<Scope>.empty(), createdAt: DateTime.now());
+  
     expect(await fossil.createAccount("", "", ""), HttpStatus.ok);  
   });
 
