@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:mastodon_api/mastodon_api.dart';
+import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 
 Future<MastodonResponse<T>> futureMastodonResponse<T>({
   required T data,
@@ -23,6 +24,16 @@ Future<MastodonResponse<T>> futureMastodonResponse<T>({
         remainingCount: 5, 
         resetAt: DateTime.now().add(const Duration(minutes: 1))
       )
+    )
+  );
+
+Future<oauth.OAuthResponse> futureOauthResponse() =>
+  Future.value(
+    oauth.OAuthResponse(
+      accessToken: "accessToken",
+      tokenType: "tokenType",
+      scopes: List<oauth.Scope>.empty(),
+      createdAt: DateTime.now()
     )
   );
 

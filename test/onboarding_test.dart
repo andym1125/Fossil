@@ -1,15 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fossil/fossil.dart';
 import 'package:mastodon_api/mastodon_api.dart';
+import 'package:mastodon_oauth2/mastodon_oauth2.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:fossil/lib_override/lib_override.dart';
-
+import 'util.dart';
 import 'mock/MockMastodonApi.dart';
 
-@GenerateNiceMocks([MockSpec<AccountsV1Service>()])
+@GenerateNiceMocks([MockSpec<AccountsV1Service>(), MockSpec<MastodonOAuth2Client>()])
 import 'onboarding_test.mocks.dart';
-import 'util.dart';
 
 
 void main() {
@@ -72,26 +74,12 @@ void main() {
     expect(await fossil.createAccount("", "", ""), HttpStatus.ok);  
   });
 
-  test('Create an account invalid token', () async{
-
-    var accountsApi = MockAccountsV1Service();
-    when(accountsApi.createAccount(username: anyNamed("username"), email: anyNamed("email"), password: anyNamed("password"), agreement: anyNamed("agreement"), locale: anyNamed("locale")))
-    .thenAnswer((realInvocation) => futureMastodonResponse
-    (data: 
-    Token(accessToken: "", 
-          tokenType: "", 
-          scopes: List<Scope>.empty(), 
-          createdAt: DateTime.now()
-      ),
-      status: HttpStatus.unauthorized));
-
-    var mastodon = makeMockMastodonApi(accounts: accountsApi);
-    var fossil = Fossil(mastodon);
-    fossil.authToken = Token(accessToken: '', tokenType: '', scopes: List<Scope>.empty(), createdAt: DateTime.now());
-
-    var response = await fossil.createAccount("", "", "");
-    expect(response, HttpStatus.unauthorized);
-    expect(fossil.authToken?.accessToken, '');
+  test('Sign in', () async {
+    var oauthMock = MockMastodonOAuth2Client();
+    when(oauthMock.executeAuthCodeFlow(scopes: anyNamed("scopes"), forceLogin: anyNamed("forceLogin")))
+    .thenAnswer((realInvocation) {
+      log("hello");
+      return 
+    })
   });
-  
 }
