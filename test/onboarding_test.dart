@@ -62,7 +62,7 @@ void main() {
 
   test('Create an account', () async {
     var accountsApi = MockAccountsV1Service();
-    when(accountsApi.createAccount(username: "", email: "", password: "", agreement: true, locale: const MyLocale(lang: Language.english, country: Country.unitedStates)))
+    when(accountsApi.createAccount(username: anyNamed("username"), email: anyNamed("email"), password: anyNamed("password"), agreement: anyNamed("agreement"), locale: anyNamed("locale")))
     .thenAnswer((realInvocation) => futureMastodonResponse(data: dummyToken()));
 
     var mastodon = makeMockMastodonApi(accounts: accountsApi);
@@ -71,4 +71,27 @@ void main() {
   
     expect(await fossil.createAccount("", "", ""), HttpStatus.ok);  
   });
+
+  test('Create an account invalid token', () async{
+
+    var accountsApi = MockAccountsV1Service();
+    when(accountsApi.createAccount(username: anyNamed("username"), email: anyNamed("email"), password: anyNamed("password"), agreement: anyNamed("agreement"), locale: anyNamed("locale")))
+    .thenAnswer((realInvocation) => futureMastodonResponse
+    (data: 
+    Token(accessToken: "", 
+          tokenType: "", 
+          scopes: List<Scope>.empty(), 
+          createdAt: DateTime.now()
+      ),
+      status: HttpStatus.unauthorized));
+
+    var mastodon = makeMockMastodonApi(accounts: accountsApi);
+    var fossil = Fossil(mastodon);
+    fossil.authToken = Token(accessToken: '', tokenType: '', scopes: List<Scope>.empty(), createdAt: DateTime.now());
+
+    var response = await fossil.createAccount("", "", "");
+    expect(response, HttpStatus.unauthorized);
+    expect(fossil.authToken?.accessToken, '');
+  });
+  
 }
