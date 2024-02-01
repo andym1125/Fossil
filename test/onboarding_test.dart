@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fossil/fossil.dart';
 import 'package:mastodon_api/mastodon_api.dart';
-import 'package:mastodon_oauth2/mastodon_oauth2.dart';
+import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'util.dart';
 import 'mock/MockMastodonApi.dart';
 
-@GenerateNiceMocks([MockSpec<AccountsV1Service>(), MockSpec<MastodonOAuth2Client>()])
+@GenerateNiceMocks([MockSpec<AccountsV1Service>(), MockSpec<oauth.MastodonOAuth2Client>()])
 import 'onboarding_test.mocks.dart';
 
 
@@ -76,10 +76,6 @@ void main() {
 
   test('Sign in', () async {
     var oauthMock = MockMastodonOAuth2Client();
-    when(oauthMock.executeAuthCodeFlow(scopes: anyNamed("scopes"), forceLogin: anyNamed("forceLogin")))
-    .thenAnswer((realInvocation) {
-      log("hello");
-      return 
-    })
+    when(oauthMock.executeAuthCodeFlow(scopes: anyNamed("scopes"), forceLogin: anyNamed("forceLogin")));
   });
 }
