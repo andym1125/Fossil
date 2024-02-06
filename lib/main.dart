@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
-//import 'package:fossil/home.dart';
+import 'package:fossil/home.dart';
 import 'signup.dart';
+//import 'route.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -75,7 +76,10 @@ class _YourWidgetState extends State<MyApp> {
                                 await Future.delayed(const Duration(seconds: 1));
 
                                 if (!context.mounted) return;
-                                Navigator.of(context).pushNamed('/home');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const HomePage())
+                                );
                                 /*
                                 Navigator.push(
                                   context,

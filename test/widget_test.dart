@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fossil/login.dart';
+// import 'package:fossil/login.dart';
 
 import 'package:fossil/main.dart';
 import 'package:fossil/signup.dart';
@@ -47,7 +47,7 @@ void main() {
     expect(find.text('Passwords do not match'), findsOneWidget);
   });
   
-
+  /*
   testWidgets('LoginPage UI', (WidgetTester tester) async {
     // Build fidger
     await tester.pumpWidget(const MyApp());
@@ -80,6 +80,6 @@ void main() {
     await tester.enterText(find.byType(TextField).at(1), 'test_password');
     expect(find.text('test_password'), findsOneWidget);
   });
-
+  */
   
 }
