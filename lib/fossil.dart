@@ -7,22 +7,25 @@ import 'package:mastodon_api/mastodon_api.dart' as m;
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 
+
 class Fossil
 {
+
   late m.MastodonApi mastodon;
+  late oauth.MastodonOAuth2Client oauth2;
   m.Token? authToken;
 
   bool authenticated = false;
-
+   
   // Constructs a new Fossil backend instance based on environmental configuration
-  Fossil([m.MastodonApi? replaceApi])
+  Fossil({m.MastodonApi? replaceApi, oauth.MastodonOAuth2Client? replaceOAuth2Client})
   {
     if(replaceApi != null)
     {
       mastodon = replaceApi;
       return;
     }
-
+    else{
     mastodon = m.MastodonApi(
       instance: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN'),
       bearerToken: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_BEARER_TOKEN'),
@@ -44,7 +47,26 @@ class Fossil
       //! The default timeout is 10 seconds.
       timeout: const Duration(seconds: 20),
     );
+    }
+ 
+    if (replaceOAuth2Client != null){
+      oauth2 = replaceOAuth2Client;
+      return;
+    }
+    else{
+      var instanceDomain = const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN');
+      oauth2 = oauth.MastodonOAuth2Client(
+        // Specify mastodon instance like "mastodon.social"
+        instance: instanceDomain,
+        clientId: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_ID'),
+        clientSecret: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_SECRET'),
 
+        // Replace redirect url as you need.
+        redirectUri: 'com.example.fossil://callback',
+        customUriScheme: 'com.example.fossil',
+      );
+      }
+    
   }
 
   Future<m.HttpStatus> createAccount(String username, String email, String password) async
@@ -63,17 +85,6 @@ class Fossil
 
   Future<m.HttpStatus> authAccount() async
   {
-    var instanceDomain = const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_DOMAIN');
-    final oauth2 = oauth.MastodonOAuth2Client(
-      // Specify mastodon instance like "mastodon.social"
-      instance: instanceDomain,
-      clientId: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_ID'),
-      clientSecret: const String.fromEnvironment('MASTODON_DEFAULT_INSTANCE_CLIENT_SECRET'),
-
-      // Replace redirect url as you need.
-      redirectUri: 'com.example.fossil://callback',
-      customUriScheme: 'com.example.fossil',
-    );
 
     final response = await oauth2.executeAuthCodeFlow(
       scopes: [
