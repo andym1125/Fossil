@@ -81,6 +81,27 @@ This file contains public configuration details which should be included as envi
 ### secret.json (secret.json.example as the example)
 secret.json is excluded in .gitignore. This file contains secret configurations, such as bearer tokens. For how to configure secret.json, see `Getting Started`
 
+## General Troubleshooting
+
+### Expired Mastodon Certificate
+
+Renew the certificate:
+```
+sudo systemctl stop mastodon-sidekiq
+sudo systemctl stop mastodon-streaming
+sudo systemctl stop mastodon-web
+sudo systemctl stop nginx
+sudo systemctl stop certbot //optional
+
+sudo certbot renew
+
+sudo systemctl stop certbot //optional
+sudo systemctl stop nginx
+sudo systemctl start mastodon-sidekiq
+sudo systemctl start mastodon-streaming
+sudo systemctl start mastodon-web
+```
+
 ## Contributing
 
 Develop on a branch named YourName/FeatureName. For example, andy/readme-update. When your branch is ready to review, submit a pull request. If any available testing fails, you PR will not be approved. Ensure your changes are sufficiently tested. At least one approval is necessary. 
