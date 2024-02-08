@@ -4,13 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
-import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
-
 
 class Fossil
 {
-
   late m.MastodonApi mastodon;
   late oauth.MastodonOAuth2Client oauth2;
   m.Token? authToken;
@@ -131,12 +128,12 @@ class Fossil
     return response.status;
   }
 
-  Future<List<Status>> getPublicTimeline() async
+  Future<List<m.Status>> getPublicTimeline() async
   {
     if(!authenticated)
       return List.empty();
     
-    late List<Status> statuses;
+    late List<m.Status> statuses;
     try {
       var response = await mastodon.v1.timelines.lookupPublicTimeline();
 

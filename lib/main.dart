@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
 import 'package:fossil/home.dart';
 import 'signup.dart';
+//import 'route.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -72,15 +73,19 @@ class _YourWidgetState extends State<MyApp> {
                                 _accessToken = fossil.authToken?.accessToken;
                               });
                               if (_accessToken != null) {
+                                await Future.delayed(const Duration(seconds: 1));
 
-                                debugPrint(fossil.authToken?.toJson().toString());
-                                //TODO: REMOVE
-                                debugPrint((await fossil.getPublicTimeline()).toString());
-
+                                if (!context.mounted) return;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => const HomePage())
                                 );
+                                /*
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const HomePage())
+                                );
+                                */
                               }
                           },
                           style: ElevatedButton.styleFrom(
