@@ -12,6 +12,7 @@ migrate_working_dir/
 secrets.json
 .vscode/
 .vscode/*
+coverage
 
 # IntelliJ related
 *.iml
