@@ -65,6 +65,12 @@ To test locally, run:
 flutter test --dart-define-from-file=env.json --dart-define-from-file=secrets.json
 ```
 
+To run coverage, ensure lcov is installed. `brew install lcov`
+```
+flutter test --coverage --dart-define-from-file=env.json --dart-define-from-file=secrets.json
+genhtml coverage/lcov.info -o coverage/html
+```
+
 ## Explanation of repository
 
 For the most part, this repo follows Flutter project conventions.

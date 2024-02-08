@@ -1,13 +1,9 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fossil/fossil.dart';
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:fossil/lib_override/lib_override.dart';
 import 'util.dart';
 import 'mock/MockMastodonApi.dart';
 
