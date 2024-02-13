@@ -130,8 +130,9 @@ class Fossil
 
   Future<List<m.Status>> getPublicTimeline() async
   {
-    if(!authenticated)
+    if(!authenticated) {
       return List.empty();
+    }
     
     late List<m.Status> statuses;
     try {
