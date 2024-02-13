@@ -3,33 +3,36 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
-import 'dart:io' as _i10;
+import 'dart:async' as _i5;
+import 'dart:io' as _i11;
 
-import 'package:mastodon_api/src/core/language.dart' as _i15;
-import 'package:mastodon_api/src/core/locale.dart' as _i6;
-import 'package:mastodon_api/src/service/entities/account.dart' as _i7;
+import 'package:mastodon_api/src/core/language.dart' as _i16;
+import 'package:mastodon_api/src/core/locale.dart' as _i7;
+import 'package:mastodon_api/src/service/entities/account.dart' as _i8;
 import 'package:mastodon_api/src/service/entities/account_preferences.dart'
-    as _i17;
-import 'package:mastodon_api/src/service/entities/empty.dart' as _i18;
+    as _i18;
+import 'package:mastodon_api/src/service/entities/empty.dart' as _i19;
 import 'package:mastodon_api/src/service/entities/familiar_follower.dart'
-    as _i16;
-import 'package:mastodon_api/src/service/entities/featured_tag.dart' as _i12;
-import 'package:mastodon_api/src/service/entities/relationship.dart' as _i14;
-import 'package:mastodon_api/src/service/entities/report.dart' as _i20;
-import 'package:mastodon_api/src/service/entities/report_category.dart' as _i21;
-import 'package:mastodon_api/src/service/entities/status.dart' as _i11;
-import 'package:mastodon_api/src/service/entities/tag.dart' as _i19;
-import 'package:mastodon_api/src/service/entities/token.dart' as _i5;
-import 'package:mastodon_api/src/service/entities/user_list.dart' as _i13;
+    as _i17;
+import 'package:mastodon_api/src/service/entities/featured_tag.dart' as _i13;
+import 'package:mastodon_api/src/service/entities/relationship.dart' as _i15;
+import 'package:mastodon_api/src/service/entities/report.dart' as _i21;
+import 'package:mastodon_api/src/service/entities/report_category.dart' as _i22;
+import 'package:mastodon_api/src/service/entities/status.dart' as _i12;
+import 'package:mastodon_api/src/service/entities/tag.dart' as _i20;
+import 'package:mastodon_api/src/service/entities/token.dart' as _i6;
+import 'package:mastodon_api/src/service/entities/user_list.dart' as _i14;
 import 'package:mastodon_api/src/service/response/mastodon_response.dart'
     as _i2;
 import 'package:mastodon_api/src/service/v1/accounts/account_default_settings_param.dart'
-    as _i8;
-import 'package:mastodon_api/src/service/v1/accounts/account_profile_meta_param.dart'
     as _i9;
+import 'package:mastodon_api/src/service/v1/accounts/account_profile_meta_param.dart'
+    as _i10;
 import 'package:mastodon_api/src/service/v1/accounts/accounts_v1_service.dart'
-    as _i3;
+    as _i4;
+import 'package:mastodon_oauth2/src/mastodon_oauth2_client.dart' as _i23;
+import 'package:mastodon_oauth2/src/response/oauth_response.dart' as _i3;
+import 'package:mastodon_oauth2/src/scope.dart' as _i24;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -54,17 +57,27 @@ class _FakeMastodonResponse_0<D> extends _i1.SmartFake
         );
 }
 
+class _FakeOAuthResponse_1 extends _i1.SmartFake implements _i3.OAuthResponse {
+  _FakeOAuthResponse_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [AccountsV1Service].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
+class MockAccountsV1Service extends _i1.Mock implements _i4.AccountsV1Service {
   @override
-  _i4.Future<_i2.MastodonResponse<_i5.Token>> createAccount({
+  _i5.Future<_i2.MastodonResponse<_i6.Token>> createAccount({
     required String? username,
     required String? email,
     required String? password,
     required bool? agreement,
-    required _i6.Locale? locale,
+    required _i7.Locale? locale,
     String? reason,
   }) =>
       (super.noSuchMethod(
@@ -80,8 +93,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #reason: reason,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i5.Token>>.value(
-            _FakeMastodonResponse_0<_i5.Token>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i6.Token>>.value(
+            _FakeMastodonResponse_0<_i6.Token>(
           this,
           Invocation.method(
             #createAccount,
@@ -97,8 +110,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i5.Token>>.value(
-                _FakeMastodonResponse_0<_i5.Token>(
+            _i5.Future<_i2.MastodonResponse<_i6.Token>>.value(
+                _FakeMastodonResponse_0<_i6.Token>(
           this,
           Invocation.method(
             #createAccount,
@@ -113,10 +126,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i5.Token>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i6.Token>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> verifyAccountCredentials(
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> verifyAccountCredentials(
           {String? bearerToken}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -124,8 +137,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#bearerToken: bearerToken},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #verifyAccountCredentials,
@@ -134,8 +147,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #verifyAccountCredentials,
@@ -143,17 +156,17 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#bearerToken: bearerToken},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> updateAccount({
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> updateAccount({
     String? displayName,
     String? bio,
     bool? discoverable,
     bool? bot,
     bool? locked,
-    _i8.AccountDefaultSettingsParam? defaultSettings,
-    List<_i9.AccountProfileMetaParam>? profileMeta,
+    _i9.AccountDefaultSettingsParam? defaultSettings,
+    List<_i10.AccountProfileMetaParam>? profileMeta,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -169,8 +182,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #profileMeta: profileMeta,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateAccount,
@@ -187,8 +200,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateAccount,
@@ -204,19 +217,19 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> updateAvatarImage(
-          {required _i10.File? file}) =>
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> updateAvatarImage(
+          {required _i11.File? file}) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateAvatarImage,
           [],
           {#file: file},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateAvatarImage,
@@ -225,8 +238,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateAvatarImage,
@@ -234,19 +247,19 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#file: file},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> updateHeaderImage(
-          {required _i10.File? file}) =>
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> updateHeaderImage(
+          {required _i11.File? file}) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateHeaderImage,
           [],
           {#file: file},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateHeaderImage,
@@ -255,8 +268,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #updateHeaderImage,
@@ -264,10 +277,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#file: file},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> lookupById(
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> lookupById(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -275,8 +288,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #lookupById,
@@ -285,8 +298,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #lookupById,
@@ -294,10 +307,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>> lookupAccount(
+  _i5.Future<_i2.MastodonResponse<_i8.Account>> lookupAccount(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -305,8 +318,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-            _FakeMastodonResponse_0<_i7.Account>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+            _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #lookupAccount,
@@ -315,8 +328,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
           this,
           Invocation.method(
             #lookupAccount,
@@ -324,10 +337,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i11.Status>>> lookupStatuses({
+  _i5.Future<_i2.MastodonResponse<List<_i12.Status>>> lookupStatuses({
     required String? accountId,
     String? maxStatusId,
     String? minStatusId,
@@ -350,8 +363,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #excludeReblogs: excludeReblogs,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-            _FakeMastodonResponse_0<List<_i11.Status>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+            _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupStatuses,
@@ -368,8 +381,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-                _FakeMastodonResponse_0<List<_i11.Status>>(
+            _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+                _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupStatuses,
@@ -385,10 +398,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupFollowers({
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupFollowers({
     required String? accountId,
     int? limit,
   }) =>
@@ -401,8 +414,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #limit: limit,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowers,
@@ -414,8 +427,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowers,
@@ -426,10 +439,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupFollowings({
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupFollowings({
     required String? accountId,
     int? limit,
   }) =>
@@ -442,8 +455,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #limit: limit,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowings,
@@ -455,8 +468,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowings,
@@ -467,10 +480,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>> lookupFeaturedTags(
+  _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>> lookupFeaturedTags(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -479,8 +492,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           {#accountId: accountId},
         ),
         returnValue:
-            _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>.value(
-                _FakeMastodonResponse_0<List<_i12.FeaturedTag>>(
+            _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>.value(
+                _FakeMastodonResponse_0<List<_i13.FeaturedTag>>(
           this,
           Invocation.method(
             #lookupFeaturedTags,
@@ -489,8 +502,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>.value(
-                _FakeMastodonResponse_0<List<_i12.FeaturedTag>>(
+            _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>.value(
+                _FakeMastodonResponse_0<List<_i13.FeaturedTag>>(
           this,
           Invocation.method(
             #lookupFeaturedTags,
@@ -498,10 +511,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i13.UserList>>> lookupContainedLists(
+  _i5.Future<_i2.MastodonResponse<List<_i14.UserList>>> lookupContainedLists(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -510,8 +523,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           {#accountId: accountId},
         ),
         returnValue:
-            _i4.Future<_i2.MastodonResponse<List<_i13.UserList>>>.value(
-                _FakeMastodonResponse_0<List<_i13.UserList>>(
+            _i5.Future<_i2.MastodonResponse<List<_i14.UserList>>>.value(
+                _FakeMastodonResponse_0<List<_i14.UserList>>(
           this,
           Invocation.method(
             #lookupContainedLists,
@@ -520,8 +533,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i13.UserList>>>.value(
-                _FakeMastodonResponse_0<List<_i13.UserList>>(
+            _i5.Future<_i2.MastodonResponse<List<_i14.UserList>>>.value(
+                _FakeMastodonResponse_0<List<_i14.UserList>>(
           this,
           Invocation.method(
             #lookupContainedLists,
@@ -529,14 +542,14 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i13.UserList>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i14.UserList>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> createFollow({
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> createFollow({
     required String? accountId,
     bool? receiveReblogs,
     bool? receiveNotifications,
-    List<_i15.Language>? filteringLanguages,
+    List<_i16.Language>? filteringLanguages,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -549,8 +562,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #filteringLanguages: filteringLanguages,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFollow,
@@ -564,8 +577,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFollow,
@@ -578,10 +591,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyFollow(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyFollow(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -589,8 +602,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollow,
@@ -599,8 +612,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollow,
@@ -608,10 +621,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyFollower(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyFollower(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -619,8 +632,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollower,
@@ -629,8 +642,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollower,
@@ -638,10 +651,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> createBlock(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> createBlock(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -649,8 +662,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createBlock,
@@ -659,8 +672,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createBlock,
@@ -668,10 +681,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyBlock(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyBlock(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -679,8 +692,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyBlock,
@@ -689,8 +702,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyBlock,
@@ -698,10 +711,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> createMute({
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> createMute({
     required String? accountId,
     bool? includeNotifications,
     Duration? duration,
@@ -716,8 +729,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #duration: duration,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createMute,
@@ -730,8 +743,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createMute,
@@ -743,10 +756,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyMute(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyMute(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -754,8 +767,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyMute,
@@ -764,8 +777,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyMute,
@@ -773,10 +786,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> createFeaturedProfile(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> createFeaturedProfile(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -784,8 +797,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFeaturedProfile,
@@ -794,8 +807,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFeaturedProfile,
@@ -803,10 +816,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyFeaturedProfile(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyFeaturedProfile(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -814,8 +827,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFeaturedProfile,
@@ -824,8 +837,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFeaturedProfile,
@@ -833,10 +846,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> updatePrivateComment({
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> updatePrivateComment({
     required String? accountId,
     String? text = r'',
   }) =>
@@ -849,8 +862,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #text: text,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #updatePrivateComment,
@@ -862,8 +875,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #updatePrivateComment,
@@ -874,10 +887,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i14.Relationship>>> lookupRelationships(
+  _i5.Future<_i2.MastodonResponse<List<_i15.Relationship>>> lookupRelationships(
           {required List<String>? accountIds}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -886,8 +899,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           {#accountIds: accountIds},
         ),
         returnValue:
-            _i4.Future<_i2.MastodonResponse<List<_i14.Relationship>>>.value(
-                _FakeMastodonResponse_0<List<_i14.Relationship>>(
+            _i5.Future<_i2.MastodonResponse<List<_i15.Relationship>>>.value(
+                _FakeMastodonResponse_0<List<_i15.Relationship>>(
           this,
           Invocation.method(
             #lookupRelationships,
@@ -896,8 +909,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i14.Relationship>>>.value(
-                _FakeMastodonResponse_0<List<_i14.Relationship>>(
+            _i5.Future<_i2.MastodonResponse<List<_i15.Relationship>>>.value(
+                _FakeMastodonResponse_0<List<_i15.Relationship>>(
           this,
           Invocation.method(
             #lookupRelationships,
@@ -905,12 +918,12 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountIds: accountIds},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i14.Relationship>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i15.Relationship>>>);
 
   @override
-  _i4.Future<
+  _i5.Future<
       _i2
-      .MastodonResponse<List<_i16.FamiliarFollower>>> lookupFamiliarFollowers(
+      .MastodonResponse<List<_i17.FamiliarFollower>>> lookupFamiliarFollowers(
           {required List<String>? accountIds}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -919,8 +932,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           {#accountIds: accountIds},
         ),
         returnValue:
-            _i4.Future<_i2.MastodonResponse<List<_i16.FamiliarFollower>>>.value(
-                _FakeMastodonResponse_0<List<_i16.FamiliarFollower>>(
+            _i5.Future<_i2.MastodonResponse<List<_i17.FamiliarFollower>>>.value(
+                _FakeMastodonResponse_0<List<_i17.FamiliarFollower>>(
           this,
           Invocation.method(
             #lookupFamiliarFollowers,
@@ -929,8 +942,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i16.FamiliarFollower>>>.value(
-                _FakeMastodonResponse_0<List<_i16.FamiliarFollower>>(
+            _i5.Future<_i2.MastodonResponse<List<_i17.FamiliarFollower>>>.value(
+                _FakeMastodonResponse_0<List<_i17.FamiliarFollower>>(
           this,
           Invocation.method(
             #lookupFamiliarFollowers,
@@ -938,10 +951,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountIds: accountIds},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i16.FamiliarFollower>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i17.FamiliarFollower>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> searchAccounts({
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> searchAccounts({
     required String? query,
     int? limit,
     bool? resolveWithWebFinger,
@@ -958,8 +971,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #onlyFollowings: onlyFollowings,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #searchAccounts,
@@ -973,8 +986,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #searchAccounts,
@@ -987,10 +1000,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i7.Account>>
+  _i5.Future<_i2.MastodonResponse<_i8.Account>>
       lookupAccountFromWebFingerAddress({
     required String? accountIdentifier,
     bool? skipWebFinger,
@@ -1004,8 +1017,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
                 #skipWebFinger: skipWebFinger,
               },
             ),
-            returnValue: _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                _FakeMastodonResponse_0<_i7.Account>(
+            returnValue: _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                _FakeMastodonResponse_0<_i8.Account>(
               this,
               Invocation.method(
                 #lookupAccountFromWebFingerAddress,
@@ -1017,8 +1030,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
               ),
             )),
             returnValueForMissingStub:
-                _i4.Future<_i2.MastodonResponse<_i7.Account>>.value(
-                    _FakeMastodonResponse_0<_i7.Account>(
+                _i5.Future<_i2.MastodonResponse<_i8.Account>>.value(
+                    _FakeMastodonResponse_0<_i8.Account>(
               this,
               Invocation.method(
                 #lookupAccountFromWebFingerAddress,
@@ -1029,18 +1042,18 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
                 },
               ),
             )),
-          ) as _i4.Future<_i2.MastodonResponse<_i7.Account>>);
+          ) as _i5.Future<_i2.MastodonResponse<_i8.Account>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i17.AccountPreferences>>
+  _i5.Future<_i2.MastodonResponse<_i18.AccountPreferences>>
       lookupPreferences() => (super.noSuchMethod(
             Invocation.method(
               #lookupPreferences,
               [],
             ),
             returnValue:
-                _i4.Future<_i2.MastodonResponse<_i17.AccountPreferences>>.value(
-                    _FakeMastodonResponse_0<_i17.AccountPreferences>(
+                _i5.Future<_i2.MastodonResponse<_i18.AccountPreferences>>.value(
+                    _FakeMastodonResponse_0<_i18.AccountPreferences>(
               this,
               Invocation.method(
                 #lookupPreferences,
@@ -1048,26 +1061,26 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
               ),
             )),
             returnValueForMissingStub:
-                _i4.Future<_i2.MastodonResponse<_i17.AccountPreferences>>.value(
-                    _FakeMastodonResponse_0<_i17.AccountPreferences>(
+                _i5.Future<_i2.MastodonResponse<_i18.AccountPreferences>>.value(
+                    _FakeMastodonResponse_0<_i18.AccountPreferences>(
               this,
               Invocation.method(
                 #lookupPreferences,
                 [],
               ),
             )),
-          ) as _i4.Future<_i2.MastodonResponse<_i17.AccountPreferences>>);
+          ) as _i5.Future<_i2.MastodonResponse<_i18.AccountPreferences>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>
+  _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>
       lookupOwnedFeaturedTags() => (super.noSuchMethod(
             Invocation.method(
               #lookupOwnedFeaturedTags,
               [],
             ),
             returnValue:
-                _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>.value(
-                    _FakeMastodonResponse_0<List<_i12.FeaturedTag>>(
+                _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>.value(
+                    _FakeMastodonResponse_0<List<_i13.FeaturedTag>>(
               this,
               Invocation.method(
                 #lookupOwnedFeaturedTags,
@@ -1075,18 +1088,18 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
               ),
             )),
             returnValueForMissingStub:
-                _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>.value(
-                    _FakeMastodonResponse_0<List<_i12.FeaturedTag>>(
+                _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>.value(
+                    _FakeMastodonResponse_0<List<_i13.FeaturedTag>>(
               this,
               Invocation.method(
                 #lookupOwnedFeaturedTags,
                 [],
               ),
             )),
-          ) as _i4.Future<_i2.MastodonResponse<List<_i12.FeaturedTag>>>);
+          ) as _i5.Future<_i2.MastodonResponse<List<_i13.FeaturedTag>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i12.FeaturedTag>> createFeaturedTag(
+  _i5.Future<_i2.MastodonResponse<_i13.FeaturedTag>> createFeaturedTag(
           {required String? tagName}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1094,8 +1107,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#tagName: tagName},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i12.FeaturedTag>>.value(
-            _FakeMastodonResponse_0<_i12.FeaturedTag>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i13.FeaturedTag>>.value(
+            _FakeMastodonResponse_0<_i13.FeaturedTag>(
           this,
           Invocation.method(
             #createFeaturedTag,
@@ -1104,8 +1117,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i12.FeaturedTag>>.value(
-                _FakeMastodonResponse_0<_i12.FeaturedTag>(
+            _i5.Future<_i2.MastodonResponse<_i13.FeaturedTag>>.value(
+                _FakeMastodonResponse_0<_i13.FeaturedTag>(
           this,
           Invocation.method(
             #createFeaturedTag,
@@ -1113,10 +1126,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#tagName: tagName},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i12.FeaturedTag>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i13.FeaturedTag>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i18.Empty>> destroyFeaturedTag(
+  _i5.Future<_i2.MastodonResponse<_i19.Empty>> destroyFeaturedTag(
           {required String? tagId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1124,8 +1137,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#tagId: tagId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-            _FakeMastodonResponse_0<_i18.Empty>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+            _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyFeaturedTag,
@@ -1134,8 +1147,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-                _FakeMastodonResponse_0<_i18.Empty>(
+            _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+                _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyFeaturedTag,
@@ -1143,17 +1156,17 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#tagId: tagId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i18.Empty>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i19.Empty>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>> lookupSuggestedTags() =>
+  _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>> lookupSuggestedTags() =>
       (super.noSuchMethod(
         Invocation.method(
           #lookupSuggestedTags,
           [],
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>.value(
-            _FakeMastodonResponse_0<List<_i19.Tag>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>.value(
+            _FakeMastodonResponse_0<List<_i20.Tag>>(
           this,
           Invocation.method(
             #lookupSuggestedTags,
@@ -1161,18 +1174,18 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>.value(
-                _FakeMastodonResponse_0<List<_i19.Tag>>(
+            _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>.value(
+                _FakeMastodonResponse_0<List<_i20.Tag>>(
           this,
           Invocation.method(
             #lookupSuggestedTags,
             [],
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>> lookupFollowedTags(
+  _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>> lookupFollowedTags(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1180,8 +1193,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>.value(
-            _FakeMastodonResponse_0<List<_i19.Tag>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>.value(
+            _FakeMastodonResponse_0<List<_i20.Tag>>(
           this,
           Invocation.method(
             #lookupFollowedTags,
@@ -1190,8 +1203,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>.value(
-                _FakeMastodonResponse_0<List<_i19.Tag>>(
+            _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>.value(
+                _FakeMastodonResponse_0<List<_i20.Tag>>(
           this,
           Invocation.method(
             #lookupFollowedTags,
@@ -1199,10 +1212,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i19.Tag>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i20.Tag>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i18.Empty>> destroyFollowSuggestion(
+  _i5.Future<_i2.MastodonResponse<_i19.Empty>> destroyFollowSuggestion(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1210,8 +1223,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-            _FakeMastodonResponse_0<_i18.Empty>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+            _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyFollowSuggestion,
@@ -1220,8 +1233,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-                _FakeMastodonResponse_0<_i18.Empty>(
+            _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+                _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyFollowSuggestion,
@@ -1229,10 +1242,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i18.Empty>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i19.Empty>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i19.Tag>> lookupTag(
+  _i5.Future<_i2.MastodonResponse<_i20.Tag>> lookupTag(
           {required String? tagId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1240,8 +1253,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#tagId: tagId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-            _FakeMastodonResponse_0<_i19.Tag>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+            _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #lookupTag,
@@ -1250,8 +1263,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-                _FakeMastodonResponse_0<_i19.Tag>(
+            _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+                _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #lookupTag,
@@ -1259,10 +1272,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#tagId: tagId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i19.Tag>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i20.Tag>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i19.Tag>> createFollowingTag(
+  _i5.Future<_i2.MastodonResponse<_i20.Tag>> createFollowingTag(
           {required String? tagId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1270,8 +1283,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#tagId: tagId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-            _FakeMastodonResponse_0<_i19.Tag>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+            _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #createFollowingTag,
@@ -1280,8 +1293,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-                _FakeMastodonResponse_0<_i19.Tag>(
+            _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+                _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #createFollowingTag,
@@ -1289,10 +1302,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#tagId: tagId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i19.Tag>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i20.Tag>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i19.Tag>> destroyFollowingTag(
+  _i5.Future<_i2.MastodonResponse<_i20.Tag>> destroyFollowingTag(
           {required String? tagId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1300,8 +1313,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#tagId: tagId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-            _FakeMastodonResponse_0<_i19.Tag>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+            _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #destroyFollowingTag,
@@ -1310,8 +1323,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i19.Tag>>.value(
-                _FakeMastodonResponse_0<_i19.Tag>(
+            _i5.Future<_i2.MastodonResponse<_i20.Tag>>.value(
+                _FakeMastodonResponse_0<_i20.Tag>(
           this,
           Invocation.method(
             #destroyFollowingTag,
@@ -1319,14 +1332,14 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#tagId: tagId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i19.Tag>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i20.Tag>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i20.Report>> createReport({
+  _i5.Future<_i2.MastodonResponse<_i21.Report>> createReport({
     required String? accountId,
     String? reason,
     bool? forward,
-    _i21.ReportCategory? category,
+    _i22.ReportCategory? category,
     List<String>? statusIds,
     List<String>? ruleIds,
   }) =>
@@ -1343,8 +1356,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             #ruleIds: ruleIds,
           },
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i20.Report>>.value(
-            _FakeMastodonResponse_0<_i20.Report>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i21.Report>>.value(
+            _FakeMastodonResponse_0<_i21.Report>(
           this,
           Invocation.method(
             #createReport,
@@ -1360,8 +1373,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i20.Report>>.value(
-                _FakeMastodonResponse_0<_i20.Report>(
+            _i5.Future<_i2.MastodonResponse<_i21.Report>>.value(
+                _FakeMastodonResponse_0<_i21.Report>(
           this,
           Invocation.method(
             #createReport,
@@ -1376,10 +1389,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             },
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i20.Report>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i21.Report>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupFeaturedProfiles(
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupFeaturedProfiles(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1387,8 +1400,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFeaturedProfiles,
@@ -1397,8 +1410,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFeaturedProfiles,
@@ -1406,10 +1419,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupMutedAccounts(
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupMutedAccounts(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1417,8 +1430,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupMutedAccounts,
@@ -1427,8 +1440,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupMutedAccounts,
@@ -1436,10 +1449,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i11.Status>>> lookupFavouritedStatuses(
+  _i5.Future<_i2.MastodonResponse<List<_i12.Status>>> lookupFavouritedStatuses(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1447,8 +1460,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-            _FakeMastodonResponse_0<List<_i11.Status>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+            _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupFavouritedStatuses,
@@ -1457,8 +1470,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-                _FakeMastodonResponse_0<List<_i11.Status>>(
+            _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+                _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupFavouritedStatuses,
@@ -1466,10 +1479,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupBlockedAccounts(
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupBlockedAccounts(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1477,8 +1490,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupBlockedAccounts,
@@ -1487,8 +1500,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupBlockedAccounts,
@@ -1496,10 +1509,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i11.Status>>> lookupBookmarkedStatuses(
+  _i5.Future<_i2.MastodonResponse<List<_i12.Status>>> lookupBookmarkedStatuses(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1507,8 +1520,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-            _FakeMastodonResponse_0<List<_i11.Status>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+            _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupBookmarkedStatuses,
@@ -1517,8 +1530,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>.value(
-                _FakeMastodonResponse_0<List<_i11.Status>>(
+            _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>.value(
+                _FakeMastodonResponse_0<List<_i12.Status>>(
           this,
           Invocation.method(
             #lookupBookmarkedStatuses,
@@ -1526,10 +1539,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i11.Status>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i12.Status>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<String>>> lookupBlockedDomains(
+  _i5.Future<_i2.MastodonResponse<List<String>>> lookupBlockedDomains(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1537,7 +1550,7 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<String>>>.value(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<String>>>.value(
             _FakeMastodonResponse_0<List<String>>(
           this,
           Invocation.method(
@@ -1547,7 +1560,7 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<String>>>.value(
+            _i5.Future<_i2.MastodonResponse<List<String>>>.value(
                 _FakeMastodonResponse_0<List<String>>(
           this,
           Invocation.method(
@@ -1556,10 +1569,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<String>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<String>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i18.Empty>> createBlockedDomain(
+  _i5.Future<_i2.MastodonResponse<_i19.Empty>> createBlockedDomain(
           {required String? domainName}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1567,8 +1580,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#domainName: domainName},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-            _FakeMastodonResponse_0<_i18.Empty>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+            _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #createBlockedDomain,
@@ -1577,8 +1590,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-                _FakeMastodonResponse_0<_i18.Empty>(
+            _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+                _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #createBlockedDomain,
@@ -1586,10 +1599,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#domainName: domainName},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i18.Empty>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i19.Empty>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i18.Empty>> destroyBlockedDomain(
+  _i5.Future<_i2.MastodonResponse<_i19.Empty>> destroyBlockedDomain(
           {required String? domainName}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1597,8 +1610,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#domainName: domainName},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-            _FakeMastodonResponse_0<_i18.Empty>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+            _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyBlockedDomain,
@@ -1607,8 +1620,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i18.Empty>>.value(
-                _FakeMastodonResponse_0<_i18.Empty>(
+            _i5.Future<_i2.MastodonResponse<_i19.Empty>>.value(
+                _FakeMastodonResponse_0<_i19.Empty>(
           this,
           Invocation.method(
             #destroyBlockedDomain,
@@ -1616,10 +1629,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#domainName: domainName},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i18.Empty>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i19.Empty>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<List<_i7.Account>>> lookupFollowRequests(
+  _i5.Future<_i2.MastodonResponse<List<_i8.Account>>> lookupFollowRequests(
           {int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1627,8 +1640,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#limit: limit},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-            _FakeMastodonResponse_0<List<_i7.Account>>(
+        returnValue: _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+            _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowRequests,
@@ -1637,8 +1650,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>.value(
-                _FakeMastodonResponse_0<List<_i7.Account>>(
+            _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>.value(
+                _FakeMastodonResponse_0<List<_i8.Account>>(
           this,
           Invocation.method(
             #lookupFollowRequests,
@@ -1646,10 +1659,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#limit: limit},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<List<_i7.Account>>>);
+      ) as _i5.Future<_i2.MastodonResponse<List<_i8.Account>>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> createFollower(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> createFollower(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1657,8 +1670,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFollower,
@@ -1667,8 +1680,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #createFollower,
@@ -1676,10 +1689,10 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
 
   @override
-  _i4.Future<_i2.MastodonResponse<_i14.Relationship>> destroyFollowRequest(
+  _i5.Future<_i2.MastodonResponse<_i15.Relationship>> destroyFollowRequest(
           {required String? accountId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1687,8 +1700,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           [],
           {#accountId: accountId},
         ),
-        returnValue: _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-            _FakeMastodonResponse_0<_i14.Relationship>(
+        returnValue: _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+            _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollowRequest,
@@ -1697,8 +1710,8 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.MastodonResponse<_i14.Relationship>>.value(
-                _FakeMastodonResponse_0<_i14.Relationship>(
+            _i5.Future<_i2.MastodonResponse<_i15.Relationship>>.value(
+                _FakeMastodonResponse_0<_i15.Relationship>(
           this,
           Invocation.method(
             #destroyFollowRequest,
@@ -1706,5 +1719,50 @@ class MockAccountsV1Service extends _i1.Mock implements _i3.AccountsV1Service {
             {#accountId: accountId},
           ),
         )),
-      ) as _i4.Future<_i2.MastodonResponse<_i14.Relationship>>);
+      ) as _i5.Future<_i2.MastodonResponse<_i15.Relationship>>);
+}
+
+/// A class which mocks [MastodonOAuth2Client].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMastodonOAuth2Client extends _i1.Mock
+    implements _i23.MastodonOAuth2Client {
+  @override
+  _i5.Future<_i3.OAuthResponse> executeAuthCodeFlow({
+    required List<_i24.Scope>? scopes,
+    bool? forceLogin = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #executeAuthCodeFlow,
+          [],
+          {
+            #scopes: scopes,
+            #forceLogin: forceLogin,
+          },
+        ),
+        returnValue: _i5.Future<_i3.OAuthResponse>.value(_FakeOAuthResponse_1(
+          this,
+          Invocation.method(
+            #executeAuthCodeFlow,
+            [],
+            {
+              #scopes: scopes,
+              #forceLogin: forceLogin,
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.OAuthResponse>.value(_FakeOAuthResponse_1(
+          this,
+          Invocation.method(
+            #executeAuthCodeFlow,
+            [],
+            {
+              #scopes: scopes,
+              #forceLogin: forceLogin,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.OAuthResponse>);
 }

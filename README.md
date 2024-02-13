@@ -65,6 +65,12 @@ To test locally, run:
 flutter test --dart-define-from-file=env.json --dart-define-from-file=secrets.json
 ```
 
+To run coverage, ensure lcov is installed. `brew install lcov`
+```
+flutter test --coverage --dart-define-from-file=env.json --dart-define-from-file=secrets.json
+genhtml coverage/lcov.info -o coverage/html
+```
+
 ## Explanation of repository
 
 For the most part, this repo follows Flutter project conventions.
@@ -74,6 +80,27 @@ This file contains public configuration details which should be included as envi
 
 ### secret.json (secret.json.example as the example)
 secret.json is excluded in .gitignore. This file contains secret configurations, such as bearer tokens. For how to configure secret.json, see `Getting Started`
+
+## General Troubleshooting
+
+### Expired Mastodon Certificate
+
+Renew the certificate:
+```
+sudo systemctl stop mastodon-sidekiq
+sudo systemctl stop mastodon-streaming
+sudo systemctl stop mastodon-web
+sudo systemctl stop nginx
+sudo systemctl stop certbot //optional
+
+sudo certbot renew
+
+sudo systemctl stop certbot //optional
+sudo systemctl stop nginx
+sudo systemctl start mastodon-sidekiq
+sudo systemctl start mastodon-streaming
+sudo systemctl start mastodon-web
+```
 
 ## Contributing
 
