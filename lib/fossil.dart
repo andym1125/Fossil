@@ -2,6 +2,7 @@
 // TODO ^
 
 import 'package:flutter/material.dart';
+import 'package:fossil/fossil_exceptions.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
@@ -137,6 +138,109 @@ class Fossil
     late List<m.Status> statuses;
     try {
       var response = await mastodon.v1.timelines.lookupPublicTimeline();
+
+      //error handling non 200
+
+      statuses = response.data;
+    } catch (e)
+    {
+      //do some error handling
+    }
+
+    return statuses;
+  }
+
+
+  /* ========== Timeline Navigation Methods ========== */
+
+  /* Moves the home cursor back one. If the cursor is already at the beginning, it will attempt
+   * to load new posts, and if there are no new posts, it will return Null.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status?> getPrevHomePost() async {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    throw UnimplementedError();
+  }
+
+  /* Moves the home cursor forward one. If the cursor is near the end, it will attempt
+   * to load older posts, and if there are no older posts, it will return Null.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status?> getNextHomePost() async {
+    throw UnimplementedError();
+  }
+
+  /* First loads new posts, then jumps the home cursor to the top of the home timeline.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<List<m.Status>> jumpToHomeTop() async {
+    throw UnimplementedError();
+  }
+
+  /* Loads new posts to the home timeline cache.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status> loadNewHomePosts() async {
+    throw UnimplementedError();
+  }
+
+  /* Loads older posts to the home timeline cache.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status> loadOldHomePosts() async {
+    throw UnimplementedError();
+  }
+
+  /* Moves the public cursor back one. If the cursor is already at the beginning, it will attempt
+   * to load new posts, and if there are no new posts, it will return Null.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status?> getPrevPublicPost() async {
+    throw UnimplementedError();
+  }
+
+  /* Moves the public cursor forward one. If the cursor is near the end, it will attempt
+   * to load older posts, and if there are no older posts, it will return Null.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status?> getNextPublicPost() async {
+    throw UnimplementedError();
+  }
+
+  /* First loads new posts, then jumps the public cursor to the top of the public timeline.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<List<m.Status>> jumpToPublicTop() async {
+    throw UnimplementedError();
+  }
+
+  /* Loads new posts to the public timeline cache.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status> loadNewPublicPosts() async {
+    throw UnimplementedError();
+  }
+
+  /* Loads older posts to the public timeline cache.
+   * Throws FossilUnauthorizedException if the client is not authenticated.
+   */
+  Future<m.Status> loadOldPublicPosts() async {
+    throw UnimplementedError();
+  }
+
+  /* ========== END ========== */
+
+  Future<List<m.Status>> getHomeTimeline() async
+  {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    
+    late List<m.Status> statuses;
+    try {
+      var response = await mastodon.v1.timelines.lookupHomeTimeline(bearerToken: authToken!.accessToken);
 
       //error handling non 200
 
