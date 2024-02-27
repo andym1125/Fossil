@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       
       key: _scaffoldKey,
 
-      body: PostClass(),
+      body: const PostClass(),
 
       floatingActionButton: FloatingActionButton(
 

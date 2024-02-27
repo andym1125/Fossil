@@ -5,7 +5,7 @@ import 'user_name.dart';
 import 'post_content/text.dart';
 import 'post_content/image.dart';
 // import 'post_content/gif.dart';
-import 'Row_Icons/Icons_list.dart';
+import 'Row_Icons/icons_list.dart';
 
 final List<Post> posts = [
   Post.fromJson({
@@ -104,7 +104,20 @@ class _PostClassState extends State<PostClass> {
         if (index >= 0) {
           children.add(IconsList());
         }
+        
+        return GestureDetector(
+          onTap: () {
 
+          },
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            )
+          )
+        );
+        /*
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -112,6 +125,7 @@ class _PostClassState extends State<PostClass> {
             children: children,
           )
         );
+        */
       },
     );
   }

@@ -22,7 +22,7 @@ class MyApp extends StatefulWidget {
 }
 class _YourWidgetState extends State<MyApp> {
 
-    String? _accessToken;
+  String? _accessToken;
   @override
   Widget build(BuildContext context) {
 
@@ -138,5 +138,4 @@ class _YourWidgetState extends State<MyApp> {
         )
     );
   }
-  
 }
