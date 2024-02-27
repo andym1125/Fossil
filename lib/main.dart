@@ -70,6 +70,7 @@ class _YourWidgetState extends State<MyApp> {
                             var fossil = Fossil();
                               await fossil.authAccount();
                               debugPrint('Access Token ${fossil.authToken?.accessToken}');
+                              _accessToken = fossil.authToken?.accessToken;
                               if (_accessToken != null) {
                                 await Future.delayed(const Duration(seconds: 1));
 
