@@ -4,7 +4,7 @@ import 'profile_pic.dart';
 import 'user_name.dart';
 import 'post_content/text.dart';
 import 'post_content/image.dart';
-// import 'post_content/gif.dart';
+//import 'post_content/gif.dart';
 import 'Row_Icons/icons.dart';
 
 final List<Post> posts = [
