@@ -5,7 +5,7 @@ import 'user_name.dart';
 import 'post_content/text.dart';
 import 'post_content/image.dart';
 // import 'post_content/gif.dart';
-import 'Row_Icons/icons_list.dart';
+import 'Row_Icons/icons.dart';
 
 final List<Post> posts = [
   Post.fromJson({
