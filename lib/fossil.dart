@@ -5,13 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:fossil/fossil_exceptions.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
+import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
+import 'package:mutex/mutex.dart';
 
 class Fossil
 {
   late m.MastodonApi mastodon;
   late oauth.MastodonOAuth2Client oauth2;
   m.Token? authToken;
+
+  //Timeline cache and cursor variables
+  static const int cursorUninitialized = -2;
+  static const int cursorEmptyTimeline = -1;
+  final Mutex homeMutex = Mutex();
+  final Mutex publicMutex = Mutex();
+  int homeCursor = -2;
+  int publicCursor = -2;
+  List<m.Status> homeTimeline = [];
+  List<m.Status> publicTimeline = [];
 
   bool authenticated = false;
    
@@ -66,6 +78,8 @@ class Fossil
       }
     
   }
+
+  /* ========== Authentication Methods ========== */
 
   Future<m.HttpStatus> createAccount(String username, String email, String password) async
   {
@@ -150,47 +164,230 @@ class Fossil
     return statuses;
   }
 
+  /* ========== END ========== */
 
   /* ========== Timeline Navigation Methods ========== */
 
-  /* Moves the home cursor back one. If the cursor is already at the beginning, it will attempt
-   * to load new posts, and if there are no new posts, it will return Null.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// Moves the home cursor back one. If the cursor is already at the beginning, it will attempt
+  /// to load new posts, and if there are no new posts, it will return Null.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
+  /// Note: This method acquires the homeMutex, and releases it before returning.
   Future<m.Status?> getPrevHomePost() async {
     if(!authenticated) {
       throw FossilUnauthorizedException();
     }
-    throw UnimplementedError();
+
+    await homeMutex.acquire();
+    try {
+      //If the home timeline is unititialized, load the first posts.
+      if(homeCursor == cursorUninitialized)
+      {
+        homeMutex.release();
+        await loadNewHomePosts();
+        await homeMutex.acquire();
+
+        if(homeTimeline.isEmpty) {
+          homeCursor = cursorEmptyTimeline;
+          return null;
+        }
+
+        homeCursor = 0;
+        return homeTimeline[homeCursor];
+      }
+
+      if(homeCursor == cursorEmptyTimeline) {
+        homeMutex.release();
+        await loadNewHomePosts();
+        await homeMutex.acquire();
+
+        if(homeTimeline.isEmpty) {
+          return null;
+        }
+
+        homeCursor = 0;
+        return homeTimeline[homeCursor];
+      }
+
+      //If the home cursor is at the beginning, load new posts.
+      if(homeCursor == 0)
+      {
+        homeMutex.release();
+        int newPosts = await loadNewHomePosts();
+        await homeMutex.acquire();
+
+        if(newPosts <= 0) {
+          return null;
+        }
+      }
+
+      homeCursor--;
+      return homeTimeline[homeCursor];
+    } catch(e) {
+      //TODO: Implement
+      throw UnimplementedError();
+    } finally {
+      homeMutex.release();
+    }
   }
 
-  /* Moves the home cursor forward one. If the cursor is near the end, it will attempt
-   * to load older posts, and if there are no older posts, it will return Null.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// Moves the home cursor forward one. If the cursor is near the end, it will attempt
+  /// to load older posts, and if there are no older posts, it will return Null.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
+  /// Note: This method acquires the homeMutex, and releases it before returning.
   Future<m.Status?> getNextHomePost() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await homeMutex.acquire();
+    try {
+
+      //If the home timeline is unititialized, load the first posts.
+      if(homeCursor == cursorUninitialized)
+      {
+        homeMutex.release();
+        await loadOldHomePosts();
+        await homeMutex.acquire();
+
+        if(homeTimeline.isEmpty) {
+          homeCursor = cursorEmptyTimeline;
+          return null;
+        }
+
+        homeCursor = 0;
+        return homeTimeline[homeCursor];
+      }
+
+      if(homeCursor == cursorEmptyTimeline) {
+        homeMutex.release();
+        await loadNewHomePosts();
+        await homeMutex.acquire();
+
+        if(homeTimeline.isEmpty) {
+          return null;
+        }
+
+        homeCursor = 0;
+        return homeTimeline[homeCursor];
+      }
+
+      //If the home cursor is at the end, load older posts.
+      if(homeCursor == homeTimeline.length - 1)
+      {
+        homeMutex.release();
+        int olderPosts = await loadOldHomePosts();
+        await homeMutex.acquire();
+
+        if(olderPosts <= 0) {
+          return null;
+        }
+      }
+
+      homeCursor++;
+      return homeTimeline[homeCursor];
+    } catch(e) {
+      //TODO: Implement
+      throw UnimplementedError();
+    } finally {
+      homeMutex.release();
+    }
   }
 
-  /* First loads new posts, then jumps the home cursor to the top of the home timeline.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
-  Future<List<m.Status>> jumpToHomeTop() async {
-    throw UnimplementedError();
+  /// First loads new posts, then jumps the home cursor to the top of the home timeline.
+  /// Returns the first posts, or null if there are no posts.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
+  Future<m.Status?> jumpToHomeTop() async {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+
+    var numPosts = await loadNewHomePosts();
+    await homeMutex.acquire();
+    try {
+      if(homeCursor == cursorUninitialized && numPosts <= 0) {
+        homeCursor = cursorEmptyTimeline;
+        return null;
+      }
+
+      if(homeCursor == cursorEmptyTimeline && numPosts <= 0) {
+        return null;
+      }
+
+      homeCursor = 0;
+      return homeTimeline[homeCursor];
+    } catch(e) {
+      //TODO: Implement
+      throw UnimplementedError();
+    } finally {
+      homeMutex.release();
+    }
   }
 
-  /* Loads new posts to the home timeline cache.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
-  Future<m.Status> loadNewHomePosts() async {
-    throw UnimplementedError();
+  /// Loads new posts to the home timeline cache. Returns the number of new posts loaded.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
+  /// Note: if the cursor is uninitialized it will stay the same. If it is newTimeline it 
+  /// will become 0. Otherwise, the cursor will increment by the number of new posts.
+  Future<int> loadNewHomePosts() async {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await homeMutex.acquire();
+    try {
+      var response = await mastodon.v1.timelines.lookupHomeTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20, //TODO: Make this a constant
+      );
+
+      if(response.status != m.HttpStatus.ok) {
+        throw FossilException(response.status, "Failed to load new home posts. ${response.data}");
+      }
+
+      var newStatuses = response.data;
+      homeTimeline.insertAll(0, newStatuses);
+      if(homeCursor == cursorUninitialized) {
+        homeCursor = cursorUninitialized;
+      } else if(homeCursor == cursorEmptyTimeline) {
+        homeCursor = 0;
+      } else {
+        homeCursor += newStatuses.length;
+      }
+      return newStatuses.length;
+    } catch(e) {
+      //TODO: Implement
+      throw UnimplementedError();
+    } finally {
+      homeMutex.release();
+    }
   }
 
-  /* Loads older posts to the home timeline cache.
+  /* Loads older posts to the home timeline cache. Returns the number of older posts loaded.
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
-  Future<m.Status> loadOldHomePosts() async {
-    throw UnimplementedError();
+  Future<int> loadOldHomePosts() async {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await homeMutex.acquire();
+    try {
+      var response = await mastodon.v1.timelines.lookupHomeTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20, //TODO: Make this a constant
+      );
+
+      if(response.status != m.HttpStatus.ok) {
+        throw FossilException(response.status, "Failed to load new home posts. ${response.data}");
+      }
+
+      var newStatuses = response.data;
+      homeTimeline.insertAll(homeTimeline.length, newStatuses);
+      return newStatuses.length;
+    } catch(e) {
+      //TODO: Implement
+      throw UnimplementedError();
+    } finally {
+      homeMutex.release();
+    }
   }
 
   /* Moves the public cursor back one. If the cursor is already at the beginning, it will attempt
@@ -216,45 +413,19 @@ class Fossil
     throw UnimplementedError();
   }
 
-  /* Loads new posts to the public timeline cache.
+  /* Loads new posts to the public timeline cache. Returns the number of new posts loaded.
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
-  Future<m.Status> loadNewPublicPosts() async {
+  Future<int> loadNewPublicPosts() async {
     throw UnimplementedError();
   }
 
-  /* Loads older posts to the public timeline cache.
+  /* Loads older posts to the public timeline cache. Returns the number of older posts loaded.
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
-  Future<m.Status> loadOldPublicPosts() async {
+  Future<int> loadOldPublicPosts() async {
     throw UnimplementedError();
   }
 
   /* ========== END ========== */
-
-  Future<List<m.Status>> getHomeTimeline() async
-  {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
-    
-    late List<m.Status> statuses;
-    try {
-      var response = await mastodon.v1.timelines.lookupHomeTimeline(bearerToken: authToken!.accessToken);
-
-      //error handling non 200
-
-      statuses = response.data;
-    } catch (e)
-    {
-      //do some error handling
-    }
-
-    return statuses;
-  }
-
-  //if auth is null
-  //if auth is empty string
-  //if call returns a error response
-  //if call returns a happy path
 }
