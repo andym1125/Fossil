@@ -102,13 +102,19 @@ class _PostClassState extends State<PostClass> {
         }
 
         if (index >= 0) {
-          children.add(IconsList());
+          children.add(const IconsList());
         }
         
         return GestureDetector(
           onTap: () {
 
           },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ) 
+          /*
           child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -116,6 +122,7 @@ class _PostClassState extends State<PostClass> {
               children: children,
             )
           )
+          */
         );
         /*
         return Container(
