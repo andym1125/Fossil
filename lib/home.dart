@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'home_drawer/drawer_list.dart';
 import 'home_navbar/profile_page.dart';
+import 'home_post/post_main.dart';
+import 'home_post/new_post/update_status.dart';
+import 'home_post/post_class.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,8 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  final List<Toot> toots = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -26,27 +27,33 @@ class _HomePageState extends State<HomePage> {
       
       key: _scaffoldKey,
 
-      body: ListView.builder(
-        itemCount: toots.length,
-        itemBuilder: (context, index) {
-          return TootCard(toot: toots[index]);
-        },
-      ),
+      body: const PostClass(),
 
       floatingActionButton: FloatingActionButton(
+
         onPressed: () {
-          // Trigger adding a new Toot
-          setState(() {
-            toots.add(
-              Toot(
-                name: 'New User',
-                username: '@newuser@mastodon.social',
-                text: 'New post',
-              ),
-            );
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewPost(
+
+                onSubmit: (text) {
+                  setState(() {
+                    posts.add(Post(
+                      profilePic: 'images/profile_pic.png',
+                      displayName: 'Aryan Patel',
+                      userName: 'Aryan_Patel',
+                      content: text,
+                      imageContent: null,
+                      gifContent: null,
+                    ));
+                  });
+                }
+              )
+            )
+          );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.rocket_launch_outlined),
       ),
 
       bottomNavigationBar: ClipRRect(
@@ -92,108 +99,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         child: DrawerColumn(),
       )
-    );
-  }
-}
-
-class Toot {
-  final String name;
-  final String username;
-  final String text;
-  int likeCount;
-
-  Toot({
-    required this.name,
-    required this.username,
-    required this.text,
-    this.likeCount = 0,
-  });
-}
-
-class TootCard extends StatefulWidget {
-  final Toot toot;
-
-  const TootCard({required this.toot, Key? key}) : super(key: key);
-
-  @override
-  State<TootCard> createState() => _TootCardState();
-}
-
-class _TootCardState extends State<TootCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0.5,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  child: Icon(Icons.person, color: Colors.white),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.toot.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      widget.toot.username,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.toot.text,
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.comment, color: Colors.black26),
-                    SizedBox(width: 4),
-                    Text('0'), // You can replace '0' with the actual comment count
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      widget.toot.likeCount++; // Increment like count
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.favorite, color: Colors.black26), // Change to filled heart icon
-                      const SizedBox(width: 4),
-                      Text(widget.toot.likeCount.toString()), // Display the like count
-                    ],
-                  ),
-                ),
-                const Icon(Icons.cached, color: Colors.black26),
-                const Icon(Icons.ios_share, color: Colors.black26),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
