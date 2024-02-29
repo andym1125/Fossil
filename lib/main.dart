@@ -22,7 +22,7 @@ class MyApp extends StatefulWidget {
 }
 class _YourWidgetState extends State<MyApp> {
 
-    String? _accessToken;
+  String? _accessToken;
   @override
   Widget build(BuildContext context) {
 
@@ -70,6 +70,7 @@ class _YourWidgetState extends State<MyApp> {
                             var fossil = Fossil();
                               await fossil.authAccount();
                               debugPrint('Access Token ${fossil.authToken?.accessToken}');
+                              _accessToken = fossil.authToken?.accessToken;
                               if (_accessToken != null) {
                                 await Future.delayed(const Duration(seconds: 1));
 
@@ -138,5 +139,4 @@ class _YourWidgetState extends State<MyApp> {
         )
     );
   }
-  
 }
