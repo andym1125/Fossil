@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
 import 'error.dart';
@@ -16,3 +17,4 @@ Route<Object?> generateRoute(RouteSettings settings) {
       );
   }
 }
+*/
