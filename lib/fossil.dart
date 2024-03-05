@@ -224,7 +224,7 @@ class Fossil
       return homeTimeline[homeCursor];
     } catch(e) {
       //TODO: Implement
-      throw UnimplementedError();
+      rethrow;
     } finally {
       homeMutex.release();
     }
@@ -286,7 +286,7 @@ class Fossil
       return homeTimeline[homeCursor];
     } catch(e) {
       //TODO: Implement
-      throw UnimplementedError();
+      rethrow;
     } finally {
       homeMutex.release();
     }
@@ -316,7 +316,7 @@ class Fossil
       return homeTimeline[homeCursor];
     } catch(e) {
       //TODO: Implement
-      throw UnimplementedError();
+      rethrow;
     } finally {
       homeMutex.release();
     }
@@ -354,7 +354,12 @@ class Fossil
       return newStatuses.length;
     } catch(e) {
       //TODO: Implement
-      throw UnimplementedError();
+      if (e is FossilException) {
+        print('Failed to load new home posts: ${e.message}');
+        rethrow;
+      } else {
+        throw UnimplementedError();
+      }
     } finally {
       homeMutex.release();
     }
@@ -384,7 +389,7 @@ class Fossil
       return newStatuses.length;
     } catch(e) {
       //TODO: Implement
-      throw UnimplementedError();
+      rethrow;
     } finally {
       homeMutex.release();
     }

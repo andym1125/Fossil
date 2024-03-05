@@ -13,7 +13,7 @@ class MockMastodonApi extends Fake implements MastodonApi {
     AccountsV1Service? accounts,
     TimelinesV1Service? timelines,
     StatusesV1Service? statuses,
-  }) : v1 = MockMastodonV1Service(accountsp: accounts);
+  }) : v1 = MockMastodonV1Service(accountsp: accounts, timelinesService: timelines, statusesService: statuses);
 
   /// Returns the v1 service.
   @override
