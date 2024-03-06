@@ -376,29 +376,6 @@ test("getPrevHomePost sets homeCursor to 0 and returns the first post when home 
   expect(response, equals(dummyStatus)); // Expect the first post
 });
 
-test("getPrevHomePost sets homeCursor to 0 and returns the first post when home cursor is uninitialized and home timeline is not empty", () async {
-  // Set up your mock and Fossil instance as before
-  var timelinesApi = MockTimelinesV1Service();
-  when(timelinesApi.lookupHomeTimeline(
-        maxStatusId: null,
-        minStatusId: null,
-        limit: 20))
-      .thenAnswer((_) async => futureMastodonResponse(
-          status: HttpStatus.ok,
-          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
-          ));
-
-  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
-  var fossil = Fossil(replaceApi: mastodon);
-  fossil.authenticated = true;
-  fossil.homeCursor = Fossil.cursorUninitialized; // Set homeCursor to cursorUninitialized
-
-  var response = await fossil.getPrevHomePost();
-
-  expect(fossil.homeCursor, 0); // Expect homeCursor to be 0
-  expect(response, equals(dummyStatus)); // Expect the first post
-});
-
 //getNextHomeposts
  test("Not autheticated Unauthroized exception load new home posts" , () async {
 
