@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fossil/fossil_exceptions.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
-import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 import 'package:mutex/mutex.dart';
 
@@ -141,27 +140,6 @@ class Fossil
       return m.HttpStatus.unauthorized;
     }
     return response.status;
-  }
-
-  Future<List<m.Status>> getPublicTimeline() async
-  {
-    if(!authenticated) {
-      return List.empty();
-    }
-    
-    late List<m.Status> statuses;
-    try {
-      var response = await mastodon.v1.timelines.lookupPublicTimeline();
-
-      //error handling non 200
-
-      statuses = response.data;
-    } catch (e)
-    {
-      //do some error handling
-    }
-
-    return statuses;
   }
 
   /* ========== END ========== */
@@ -360,9 +338,8 @@ class Fossil
     }
   }
 
-  /* Loads older posts to the home timeline cache. Returns the number of older posts loaded.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// Loads older posts to the home timeline cache. Returns the number of older posts loaded.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<int> loadOldHomePosts() async {
     if(!authenticated) {
       throw FossilUnauthorizedException();
@@ -390,25 +367,22 @@ class Fossil
     }
   }
 
-  /* Moves the public cursor back one. If the cursor is already at the beginning, it will attempt
-   * to load new posts, and if there are no new posts, it will return Null.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// Moves the public cursor back one. If the cursor is already at the beginning, it will attempt
+  /// to load new posts, and if there are no new posts, it will return Null.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getPrevPublicPost() async {
     throw UnimplementedError();
   }
 
-  /* Moves the public cursor forward one. If the cursor is near the end, it will attempt
-   * to load older posts, and if there are no older posts, it will return Null.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// Moves the public cursor forward one. If the cursor is near the end, it will attempt
+  /// to load older posts, and if there are no older posts, it will return Null.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getNextPublicPost() async {
     throw UnimplementedError();
   }
 
-  /* First loads new posts, then jumps the public cursor to the top of the public timeline.
-   * Throws FossilUnauthorizedException if the client is not authenticated.
-   */
+  /// First loads new posts, then jumps the public cursor to the top of the public timeline.
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<List<m.Status>> jumpToPublicTop() async {
     throw UnimplementedError();
   }

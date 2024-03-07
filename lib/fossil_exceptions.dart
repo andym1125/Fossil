@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:mastodon_api/mastodon_api.dart';
 
 class FossilException implements Exception {
