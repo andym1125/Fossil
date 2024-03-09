@@ -55,8 +55,29 @@ Account dummyAccount() => Account(
         fields: List<Field>.empty(), 
         createdAt: DateTime.now());
 
+
+
 Token dummyToken() => Token(
           accessToken: "accessToken", 
           tokenType: "tokenType", 
           scopes: List<Scope>.empty(), 
           createdAt: DateTime.now());
+
+
+
+
+ Status dummyStatus= Status(
+      id: '123',
+      uri: 'some_uri',
+      content: 'some_content',
+      spoilerText: 'some_spoiler_text',
+      visibility: Visibility.private,
+      favouritesCount: 0,
+      repliesCount: 0,
+      reblogsCount: 0,
+      account: dummyAccount(), 
+      mediaAttachments: [],
+      emojis: [], 
+      tags: [], 
+      createdAt: DateTime.now(),
+  );
