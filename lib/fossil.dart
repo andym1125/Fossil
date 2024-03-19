@@ -376,34 +376,214 @@ class Fossil
   /// to load new posts, and if there are no new posts, it will return Null.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getPrevPublicPost() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+
+    await publicMutex.acquire();
+    try {
+      //If the home timeline is unititialized, load the first posts.
+      if(publicCursor == cursorUninitialized)
+      {
+        publicMutex.release();
+        await loadNewHomePosts();
+        await publicMutex.acquire();
+
+        if(publicTimeline.isEmpty) {
+          publicCursor = cursorEmptyTimeline;
+          return null;
+        }
+
+        publicCursor = 0;
+        return publicTimeline[publicCursor];
+      }
+
+      if(publicCursor == cursorEmptyTimeline) {
+        publicMutex.release();
+        await loadNewPublicPosts();
+        await publicMutex.acquire();
+
+        if(publicTimeline.isEmpty) {
+          return null;
+        }
+
+        homeCursor = 0;
+        return publicTimeline[publicCursor];
+      }
+
+      //If the home cursor is at the beginning, load new posts.
+      if(publicCursor == 0)
+      {
+        publicMutex.release();
+        int newPosts = await loadNewPublicPosts();
+        await publicMutex.acquire();
+
+        if(newPosts <= 0) {
+          return null;
+        }
+      }
+
+      publicCursor--;
+      return publicTimeline[publicCursor];
+    } catch(e) {
+      //TODO: Implement
+      rethrow;
+    } finally {
+      publicMutex.release();
+    }
   }
 
   /// Moves the public cursor forward one. If the cursor is near the end, it will attempt
   /// to load older posts, and if there are no older posts, it will return Null.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getNextPublicPost() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await publicMutex.acquire();
+    try {
+
+      //If the home timeline is unititialized, load the first posts.
+      if(publicCursor == cursorUninitialized)
+      {
+        publicMutex.release();
+        await loadOldPublicPosts();
+        await publicMutex.acquire();
+
+        if(publicTimeline.isEmpty) {
+          publicCursor = cursorEmptyTimeline;
+          return null;
+        }
+
+        publicCursor = 0;
+        return publicTimeline[publicCursor];
+      }
+
+      if(publicCursor == cursorEmptyTimeline) {
+        publicMutex.release();
+        await loadNewPublicPosts();
+        await publicMutex.acquire();
+
+        if(publicTimeline.isEmpty) {
+          return null;
+        }
+
+        publicCursor = 0;
+        return publicTimeline[publicCursor];
+      }
+
+      //If the home cursor is at the end, load older posts.
+      if(publicCursor == publicTimeline.length - 1)
+      {
+        publicMutex.release();
+        int olderPosts = await loadOldPublicPosts();
+        await publicMutex.acquire();
+
+        if(olderPosts <= 0) {
+          return null;
+        }
+      }
+
+      publicCursor++;
+      return publicTimeline[publicCursor];
+    } catch(e) {
+      rethrow;
+    } finally {
+      publicMutex.release();
+    }
   }
 
   /// First loads new posts, then jumps the public cursor to the top of the public timeline.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<List<m.Status>> jumpToPublicTop() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+
+    var numPosts = await loadNewPublicPosts();
+    await publicMutex.acquire();
+    try {
+      if(publicCursor == cursorUninitialized && numPosts <= 0) {
+        publicCursor = cursorEmptyTimeline;
+        return [];
+      }
+
+      if(publicCursor == cursorEmptyTimeline && numPosts <= 0) {
+        return [];
+      }
+
+      publicCursor = 0;
+      return publicTimeline;
+    } catch(e) {
+      rethrow;
+    } finally {
+      publicMutex.release();
+    }
   }
 
   /* Loads new posts to the public timeline cache. Returns the number of new posts loaded.
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
   Future<int> loadNewPublicPosts() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await publicMutex.acquire();
+    try {
+      var response = await mastodon.v1.timelines.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20, //TODO: Make this a constant
+      );
+
+      if(response.status != m.HttpStatus.ok) {
+        throw FossilException(response.status, "Failed to load new public posts. ${response.data}");
+      }
+
+      var newStatuses = response.data;
+      publicTimeline.insertAll(0, newStatuses);
+      if(publicCursor == cursorUninitialized) {
+        publicCursor = cursorUninitialized;
+      } else if(publicCursor == cursorEmptyTimeline) {
+        publicCursor = 0;
+      } else {
+        publicCursor += newStatuses.length;
+      }
+      return newStatuses.length;
+    } catch(e) {
+      rethrow;
+    } finally {
+      publicMutex.release();
+    }
   }
 
   /* Loads older posts to the public timeline cache. Returns the number of older posts loaded.
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
   Future<int> loadOldPublicPosts() async {
-    throw UnimplementedError();
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+    await publicMutex.acquire();
+    try {
+      var response = await mastodon.v1.timelines.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20, //TODO: Make this a constant
+      );
+
+      if(response.status != m.HttpStatus.ok) {
+        throw FossilException(response.status, "Failed to load new public posts. ${response.data}");
+      }
+
+      var newStatuses = response.data;
+      publicTimeline.insertAll(publicTimeline.length, newStatuses);
+      return newStatuses.length;
+    } catch(e) {
+      rethrow;
+    } finally {
+      publicMutex.release();
+    }
   }
 
   /* ========== END ========== */
