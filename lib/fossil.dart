@@ -78,6 +78,12 @@ class Fossil
     
   }
 
+  Future<m.Status> getPost(String id) async {
+    ensureAuthenticated();
+    var response = await mastodon.v1.statuses.lookupStatus(statusId: id);
+    return response.data;
+  }
+
   /* ========== Authentication Methods ========== */
 
   Future<m.HttpStatus> createAccount(String username, String email, String password) async
@@ -142,6 +148,13 @@ class Fossil
     return response.status;
   }
 
+  /// Throws FossilUnauthorizedException if the client is not authenticated.
+  void ensureAuthenticated() {
+    if(!authenticated) {
+      throw FossilUnauthorizedException();
+    }
+  }
+
   /* ========== END ========== */
 
   /* ========== Timeline Navigation Methods ========== */
@@ -151,9 +164,7 @@ class Fossil
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   /// Note: This method acquires the homeMutex, and releases it before returning.
   Future<m.Status?> getPrevHomePost() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
 
     await homeMutex.acquire();
     try {
@@ -213,9 +224,7 @@ class Fossil
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   /// Note: This method acquires the homeMutex, and releases it before returning.
   Future<m.Status?> getNextHomePost() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await homeMutex.acquire();
     try {
 
@@ -274,10 +283,7 @@ class Fossil
   /// Returns the first posts, or null if there are no posts.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> jumpToHomeTop() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
-
+    ensureAuthenticated();
     var numPosts = await loadNewHomePosts();
     await homeMutex.acquire();
     try {
@@ -305,9 +311,7 @@ class Fossil
   /// Note: if the cursor is uninitialized it will stay the same. If it is newTimeline it 
   /// will become 0. Otherwise, the cursor will increment by the number of new posts.
   Future<int> loadNewHomePosts() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await homeMutex.acquire();
     try {
       var response = await mastodon.v1.timelines.lookupHomeTimeline(
@@ -346,9 +350,7 @@ class Fossil
   /// Loads older posts to the home timeline cache. Returns the number of older posts loaded.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<int> loadOldHomePosts() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await homeMutex.acquire();
     try {
       var response = await mastodon.v1.timelines.lookupHomeTimeline(
@@ -376,10 +378,7 @@ class Fossil
   /// to load new posts, and if there are no new posts, it will return Null.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getPrevPublicPost() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
-
+    ensureAuthenticated();
     await publicMutex.acquire();
     try {
       //If the home timeline is unititialized, load the first posts.
@@ -437,9 +436,7 @@ class Fossil
   /// to load older posts, and if there are no older posts, it will return Null.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<m.Status?> getNextPublicPost() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await publicMutex.acquire();
     try {
 
@@ -496,10 +493,7 @@ class Fossil
   /// First loads new posts, then jumps the public cursor to the top of the public timeline.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   Future<List<m.Status>> jumpToPublicTop() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
-
+    ensureAuthenticated();
     var numPosts = await loadNewPublicPosts();
     await publicMutex.acquire();
     try {
@@ -525,9 +519,7 @@ class Fossil
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
   Future<int> loadNewPublicPosts() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await publicMutex.acquire();
     try {
       var response = await mastodon.v1.timelines.lookupPublicTimeline(
@@ -561,9 +553,7 @@ class Fossil
    * Throws FossilUnauthorizedException if the client is not authenticated.
    */
   Future<int> loadOldPublicPosts() async {
-    if(!authenticated) {
-      throw FossilUnauthorizedException();
-    }
+    ensureAuthenticated();
     await publicMutex.acquire();
     try {
       var response = await mastodon.v1.timelines.lookupPublicTimeline(
