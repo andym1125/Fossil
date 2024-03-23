@@ -23,6 +23,8 @@ class Fossil
   int publicCursor = -2;
   List<m.Status> homeTimeline = [];
   List<m.Status> publicTimeline = [];
+  List<m.Status> favoritedStatuses = [];
+  List<m.Status> rebloggedStatuses = [];
 
   bool authenticated = false;
    
@@ -585,6 +587,107 @@ class Fossil
       publicMutex.release();
     }
   }
+
+
+  //Function for Favorite
+  Future<int> favorite(String id) async {
+  if (!authenticated) {
+    throw FossilUnauthorizedException();
+  }
+  await publicMutex.acquire();
+  try {
+    var response = await mastodon.v1.statuses.createFavourite(
+      statusId: id,
+    );
+
+    if (response.status != m.HttpStatus.ok) {
+      throw FossilException(response.status, "Failed to favorite the post. ${response.data}");
+    }
+
+    var favoritedStatus = response.data;
+    
+    favoritedStatuses.add(favoritedStatus);
+    return 1; // Return 1 to indicate that one status has been favorited
+  } catch (e) {
+    rethrow;
+  } finally {
+    publicMutex.release();
+  }
+}
+Future<int> destroyFavorite(String id) async {
+  if (!authenticated) {
+    throw FossilUnauthorizedException();
+  }
+  await publicMutex.acquire();
+  try {
+    var response = await mastodon.v1.statuses.destroyFavourite(
+      statusId: id,
+    );
+
+    if (response.status != m.HttpStatus.ok) {
+      throw FossilException(response.status, "Failed to unfavorite the post. ${response.data}");
+    }
+
+    var unfavoritedStatus = response.data;
+    favoritedStatuses.removeWhere((status) => status.id == unfavoritedStatus.id);
+    return 1; // Return 1 to indicate that one status has been unfavorited
+  } catch (e) {
+    rethrow;
+  } finally {
+    publicMutex.release();
+  }
+}
+
+//Function for Reblog
+Future<int> createReblog(String id) async {
+  if (!authenticated) {
+    throw FossilUnauthorizedException();
+  }
+  await publicMutex.acquire();
+  try {
+    var response = await mastodon.v1.statuses.createReblog(
+      statusId: id,
+    );
+
+    if (response.status != m.HttpStatus.ok) {
+      throw FossilException(response.status, "Failed to reblog the post. ${response.data}");
+    }
+
+    var rebloggedStatus = response.data;
+    
+    rebloggedStatuses.add(rebloggedStatus);
+    return 1; // Return 1 to indicate that one status has been reblogged
+  } catch (e) {
+    rethrow;
+  } finally {
+    publicMutex.release();
+  }
+}
+
+Future<int> destroyReblog(String id) async {
+  if (!authenticated) {
+    throw FossilUnauthorizedException();
+  }
+  await publicMutex.acquire();
+  try {
+    var response = await mastodon.v1.statuses.destroyReblog(
+      statusId: id,
+    );
+
+    if (response.status != m.HttpStatus.ok) {
+      throw FossilException(response.status, "Failed to unreblog the post. ${response.data}");
+    }
+
+    var unrebloggedStatus = response.data;
+    
+    rebloggedStatuses.removeWhere((status) => status.id == unrebloggedStatus.id);
+    return 1; // Return 1 to indicate that one status has been unreblogged
+  } catch (e) {
+    rethrow;
+  } finally {
+    publicMutex.release();
+  }
+}
 
   /* ========== END ========== */
 }
