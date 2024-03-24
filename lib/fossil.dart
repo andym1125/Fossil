@@ -388,7 +388,7 @@ class Fossil
       if(publicCursor == cursorUninitialized)
       {
         publicMutex.release();
-        await loadNewHomePosts();
+        await loadNewPublicPosts(); //Forgot to change to public posts
         await publicMutex.acquire();
 
         if(publicTimeline.isEmpty) {
