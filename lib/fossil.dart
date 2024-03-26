@@ -78,10 +78,35 @@ class Fossil
     
   }
 
-  Future<m.Status> getPost(String id) async {
+  Future<m.Status> getPost(String id) async { //TODO: Could add param to allow for low priority caching of replies?
     ensureAuthenticated();
     var response = await mastodon.v1.statuses.lookupStatus(statusId: id);
     return response.data;
+  }
+
+  /* ========== View Reply Methods ========== */
+
+  /// Returns the direct replies (descendants where inReplyToId = id) of a status.
+  Future<List<m.Status>> getDirectReplies(String id) async {
+    ensureAuthenticated();
+    var response = await mastodon.v1.statuses.lookupStatusContext(statusId: id);
+    var ret = response.data.descendants;
+    ret.retainWhere((element) => element.inReplyToId == id);
+    return ret;
+  }
+
+  /// Returns the replies (descendants) of a status.
+  Future<List<m.Status>> getReplies(String id) async {
+    ensureAuthenticated();
+    var response = await mastodon.v1.statuses.lookupStatusContext(statusId: id);
+    return response.data.descendants;
+  }
+
+  /// Returns the ancestors of a status.
+  Future<List<m.Status>> getAncestors(String id) async {
+    ensureAuthenticated();
+    var response = await mastodon.v1.statuses.lookupStatusContext(statusId: id);
+    return response.data.ancestors;
   }
 
   /* ========== Authentication Methods ========== */
@@ -154,8 +179,6 @@ class Fossil
       throw FossilUnauthorizedException();
     }
   }
-
-  /* ========== END ========== */
 
   /* ========== Timeline Navigation Methods ========== */
 
@@ -575,6 +598,4 @@ class Fossil
       publicMutex.release();
     }
   }
-
-  /* ========== END ========== */
 }
