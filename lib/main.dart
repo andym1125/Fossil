@@ -11,18 +11,17 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  
   const MyApp({super.key});
-
-
 
   @override
   State<MyApp> createState() => _YourWidgetState();
-
-
 }
+
 class _YourWidgetState extends State<MyApp> {
 
   String? _accessToken;
+  var fossil = Fossil();
   @override
   Widget build(BuildContext context) {
 
@@ -67,25 +66,18 @@ class _YourWidgetState extends State<MyApp> {
                       width: 295.0,
                       child: ElevatedButton(
                           onPressed: () async {
-                            var fossil = Fossil();
-                              await fossil.authAccount();
-                              debugPrint('Access Token ${fossil.authToken?.accessToken}');
-                              _accessToken = fossil.authToken?.accessToken;
-                              if (_accessToken != null) {
-                                await Future.delayed(const Duration(seconds: 1));
+                            await fossil.authAccount();
+                            debugPrint('Access Token ${fossil.authToken?.accessToken}');
+                            _accessToken = fossil.authToken?.accessToken;
+                            if (_accessToken != null) {
+                              await Future.delayed(const Duration(seconds: 1));
 
-                                if (!context.mounted) return;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const HomePage())
-                                );
-                                /*
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const HomePage())
-                                );
-                                */
-                              }
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomePage(fossil: fossil))
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -114,7 +106,7 @@ class _YourWidgetState extends State<MyApp> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const SignupPageState())
+                                  MaterialPageRoute(builder: (context) => SignupPageState(fossil: fossil))
                               );
                             },
                             style: ElevatedButton.styleFrom(

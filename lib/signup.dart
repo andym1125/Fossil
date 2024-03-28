@@ -1,12 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
 import 'fossil.dart';
 import 'package:mastodon_api/mastodon_api.dart';
 
 class SignupPageState extends StatefulWidget {
-  const SignupPageState({super.key});
+
+  // ignore: prefer_typing_uninitialized_variables
+  final fossil;
+
+  const SignupPageState({super.key, required this.fossil});
 
   @override
   State<SignupPageState> createState() => _SignupPageState();
@@ -151,7 +154,7 @@ class _SignupPageState extends State<SignupPageState> {
                     await Future.delayed(Duration.zero, () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const HomePage())
+                          MaterialPageRoute(builder: (context) => HomePage(fossil: fossil))
                       );
                     });
                   },

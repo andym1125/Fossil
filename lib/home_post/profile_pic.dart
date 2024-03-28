@@ -10,7 +10,7 @@ class ProfilePic extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: 30,
-      backgroundImage: AssetImage(imageProvider),
+      backgroundImage: NetworkImage(imageProvider),
     );
   }
 }
