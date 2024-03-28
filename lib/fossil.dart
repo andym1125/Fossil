@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fossil/fossil_exceptions.dart';
 import 'package:fossil/lib_override/lib_override.dart';
 import 'package:mastodon_api/mastodon_api.dart' as m;
+import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mastodon_oauth2/mastodon_oauth2.dart' as oauth;
 import 'package:mutex/mutex.dart';
 
@@ -83,6 +84,30 @@ class Fossil {
   Future<m.Status> getPost(String id) async { //TODO: Could add param to allow for low priority caching of replies?
     ensureAuthenticated();
     var response = await mastodon.v1.statuses.lookupStatus(statusId: id);
+    return response.data;
+  }
+
+  Future<m.Status> createPost({
+    required String text,
+    String? spoilerText,
+    String? inReplyToStatusId,
+    bool? sensitive,
+    m.Visibility? visibility,
+    Language? language,
+    List<String>? mediaIds,
+    StatusPollParam? poll,
+  }) async {
+    ensureAuthenticated();
+    var response = await mastodon.v1.statuses.createStatus(
+      text: text,
+      spoilerText: spoilerText,
+      inReplyToStatusId: inReplyToStatusId,
+      sensitive: sensitive,
+      visibility: visibility,
+      language: language,
+      mediaIds: mediaIds,
+      poll: poll,
+    );
     return response.data;
   }
 
