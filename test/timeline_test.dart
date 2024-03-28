@@ -1100,6 +1100,23 @@ test("jumpToPublicTop returns the publicTimeline and sets publicCursor to 0 when
 
 });
 
+test('favorite returns the favorited status when successful', () async {
+  var statusesApi = MockStatusesV1Service();
+  when(statusesApi.createFavourite(statusId: anyNamed('statusId')))
+      .thenAnswer((_) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: dummyStatus,
+          ));
+
+  var mastodon = makeMockMastodonApi(statuses: statusesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+
+  var status = await fossil.favorite(dummyStatus.id);
+
+  expect(status.isFavourited, isTrue);
+});
+
 
 
 }

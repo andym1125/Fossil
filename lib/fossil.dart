@@ -584,16 +584,19 @@ class Fossil {
       throw FossilUnauthorizedException();
     }
 
+    print('statusId: $id');
     try {
       var response = await mastodon.v1.statuses.createFavourite(
         statusId: id,
       );
 
+      print('Response: $response');
+
       if (response.status != m.HttpStatus.ok) {
         throw FossilException(
             response.status, "Failed to favorite the post. ${response.data}");
       }
-      return response.data; // Return 1 to indicate that one status has been favorited
+      return response.data; 
     } catch (e) {
       rethrow;
     } finally {}
@@ -614,7 +617,8 @@ class Fossil {
             response.status, "Failed to unfavorite the post. ${response.data}");
       }
 
-      return response.data; // Return 1 to indicate that one status has been unfavorited
+      return response
+          .data; // Return 1 to indicate that one status has been unfavorited
     } catch (e) {
       rethrow;
     } finally {}
@@ -635,7 +639,8 @@ class Fossil {
             response.status, "Failed to reblog the post. ${response.data}");
       }
 
-      return response.data; // Return 1 to indicate that one status has been reblogged
+      return response
+          .data; // Return 1 to indicate that one status has been reblogged
     } catch (e) {
       rethrow;
     } finally {}
