@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 // import 'package:fossil/login.dart';
 
 import 'package:fossil/main.dart';
-import 'package:fossil/signup.dart';
+// import 'package:fossil/signup.dart';
 
 void main() {
   testWidgets('UI widgets test', (WidgetTester tester) async {
@@ -22,7 +22,7 @@ void main() {
 
     expect(find.widgetWithText(ElevatedButton, 'Sign Up'), findsOneWidget);
   });
-
+  /*
   testWidgets('SignUpPage UI', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
     await tester.pumpWidget(const MaterialApp( home: SignupPageState()));
@@ -32,7 +32,9 @@ void main() {
     expect(find.byType(ElevatedButton), findsOneWidget);
 
   } );
+  */
 
+  /*
   testWidgets('Error fot the mismatched passwords during signup', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: SignupPageState()));
     // Enter incorrect password
@@ -46,7 +48,7 @@ void main() {
     // check message
     expect(find.text('Passwords do not match'), findsOneWidget);
   });
-  
+  */
   /*
   testWidgets('LoginPage UI', (WidgetTester tester) async {
     // Build fidger

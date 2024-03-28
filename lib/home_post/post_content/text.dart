@@ -47,7 +47,7 @@ class ContentText extends StatelessWidget {
                 const SizedBox(width: 10),
                 if (link.isNotEmpty)
                   Expanded(
-                    child: Text('$link')
+                    child: Text(link)
                   ),
               ],
             ),

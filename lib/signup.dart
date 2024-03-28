@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fossil/home.dart';
 import 'fossil.dart';
@@ -7,6 +6,7 @@ import 'package:mastodon_api/mastodon_api.dart';
 
 class SignupPageState extends StatefulWidget {
 
+  // ignore: prefer_typing_uninitialized_variables
   final fossil;
 
   const SignupPageState({super.key, required this.fossil});

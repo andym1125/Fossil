@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             debugPrint('is favourited: ${status.isFavourited}');
             debugPrint('is muted: ${status.isMuted}');
             // debugPrint('media attachments: ${status.mediaAttachments}');
-            if (status.mediaAttachments != m.Empty()) {
+            if (status.mediaAttachments != const m.Empty()) {
               for (var attachment in status.mediaAttachments) {
                 debugPrint('Media Attachment ID: ${attachment.id}');
                 debugPrint('Type: ${attachment.type}');
