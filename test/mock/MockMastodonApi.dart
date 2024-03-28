@@ -3,6 +3,8 @@
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mockito/mockito.dart';
 
+import '../timeline_test.mocks.dart';
+
 class MockMastodonApi extends Fake implements MastodonApi {
   /// Returns the new instance of [_MastodonApi].
   MockMastodonApi({
@@ -11,7 +13,9 @@ class MockMastodonApi extends Fake implements MastodonApi {
     required Duration timeout,
     RetryConfig? retryConfig,
     AccountsV1Service? accounts,
-  }) : v1 = MockMastodonV1Service(accountsp: accounts);
+    TimelinesV1Service? timelines,
+    StatusesV1Service? statuses,
+  }) : v1 = MockMastodonV1Service(accountsp: accounts, timelinesService: timelines, statusesService: statuses);
 
   /// Returns the v1 service.
   @override
@@ -24,21 +28,30 @@ MockMastodonApi makeMockMastodonApi({
   Duration? timeout,
   RetryConfig? retryConfig,
   AccountsV1Service? accounts,
+  TimelinesV1Service? timelines,
+  StatusesV1Service? statuses,
 }) => MockMastodonApi(
   instance: "mock.fossil.com",
   bearerToken: bearerToken ?? "dsgsdfsdf",
   timeout: const Duration(seconds: 10),
   retryConfig: retryConfig,
-  accounts: accounts
+  accounts: accounts,
+  timelines: timelines,
 );
 
 class MockMastodonV1Service extends Fake implements MastodonV1Service {
   MockMastodonV1Service({
-    AccountsV1Service? accountsp
+    AccountsV1Service? accountsp,
+    TimelinesV1Service? timelinesService,
+    StatusesV1Service? statusesService,
   }) {
     if(accountsp != null) {
       accounts = accountsp;
     }
+    if(timelinesService != null) {
+      timelines = timelinesService;
+    }
+    statuses = statusesService ?? MockStatusesV1Service();
   }
 
   
@@ -52,11 +65,11 @@ class MockMastodonV1Service extends Fake implements MastodonV1Service {
   @override
   late AccountsV1Service accounts;
 
-  // @override
-  // final StatusesV1Service statuses;
+  @override
+  late StatusesV1Service statuses;
 
-  // @override
-  // final TimelinesV1Service timelines;
+  @override
+  late TimelinesV1Service timelines;
 
   // @override
   // final NotificationsV1Service notifications;
