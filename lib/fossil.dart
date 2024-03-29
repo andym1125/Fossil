@@ -584,13 +584,10 @@ class Fossil {
       throw FossilUnauthorizedException();
     }
 
-    print('statusId: $id');
     try {
       var response = await mastodon.v1.statuses.createFavourite(
         statusId: id,
       );
-
-      print('Response: $response');
 
       if (response.status != m.HttpStatus.ok) {
         throw FossilException(
@@ -602,7 +599,7 @@ class Fossil {
     } finally {}
   }
 
-  Future<m.Status> destroyFavorite(String id) async {
+  Future<m.Status> removeFavorite(String id) async {
     if (!authenticated) {
       throw FossilUnauthorizedException();
     }
@@ -625,7 +622,7 @@ class Fossil {
   }
 
 //Function for Reblog
-  Future<m.Status> createReblog(String id) async {
+  Future<m.Status> makeReblog(String id) async {
     if (!authenticated) {
       throw FossilUnauthorizedException();
     }
@@ -646,7 +643,7 @@ class Fossil {
     } finally {}
   }
 
-  Future<m.Status> destroyReblog(String id) async {
+  Future<m.Status> removeReblog(String id) async {
     if (!authenticated) {
       throw FossilUnauthorizedException();
     }

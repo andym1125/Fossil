@@ -37,6 +37,7 @@ MockMastodonApi makeMockMastodonApi({
   retryConfig: retryConfig,
   accounts: accounts,
   timelines: timelines,
+  statuses: statuses,
 );
 
 class MockMastodonV1Service extends Fake implements MastodonV1Service {
@@ -51,7 +52,9 @@ class MockMastodonV1Service extends Fake implements MastodonV1Service {
     if(timelinesService != null) {
       timelines = timelinesService;
     }
-    statuses = statusesService ?? MockStatusesV1Service();
+    if(statusesService != null) {
+      statuses = statusesService;
+    }
   }
 
   
