@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/home_post/profile_pic.dart';
 import 'package:fossil/home_post/user_name.dart';
+import 'package:fossil/fossil.dart';
 
 class NewPost extends StatefulWidget {
-  final Function(String) onSubmit;
 
-  const NewPost({super.key, required this.onSubmit});
+  final Fossil fossil;
+
+  const NewPost({super.key, required this.fossil});
 
   @override
   State<NewPost> createState() => _NewPostState();
@@ -20,7 +22,6 @@ class _NewPostState extends State<NewPost> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
     
-
     return Scaffold(
 
       appBar: AppBar(
@@ -29,7 +30,9 @@ class _NewPostState extends State<NewPost> {
           TextButton.icon(
             onPressed: () {
               if (newText != null && newText!.isNotEmpty) {
-                widget.onSubmit(newText!);
+                widget.fossil.createPost(
+                  text: newText!,
+                );
                 Navigator.pop(context);
               }
             }, 

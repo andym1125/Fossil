@@ -118,8 +118,13 @@ class Fossil {
     ensureAuthenticated();
     var response = await mastodon.v1.statuses.lookupStatusContext(statusId: id);
     var ret = response.data.descendants;
-    ret.retainWhere((element) => element.inReplyToId == id);
-    return ret;
+    List<m.Status> filteredReplies = [];
+    for (var element in ret) {
+      if (element.inReplyToId == id) {
+        filteredReplies.add(element);
+      }
+    }
+    return filteredReplies;
   }
 
   /// Returns the replies (descendants) of a status.
@@ -268,6 +273,29 @@ class Fossil {
   /// to load older posts, and if there are no older posts, it will return Null.
   /// Throws FossilUnauthorizedException if the client is not authenticated.
   /// Note: This method acquires the homeMutex, and releases it before returning.
+  
+   
+  Future<List<m.Status>> getPublicTimeline() async
+  {
+    if(!authenticated) {
+      return List.empty();
+    }
+    
+    late List<m.Status> statuses;
+    try {
+      var response = await mastodon.v1.timelines.lookupPublicTimeline();
+
+      //error handling non 200
+
+      statuses = response.data;
+    } catch (e)
+    {
+      //do some error handling
+    }
+
+    return statuses;
+  }
+
   Future<m.Status?> getNextHomePost() async {
     ensureAuthenticated();
     await homeMutex.acquire();
