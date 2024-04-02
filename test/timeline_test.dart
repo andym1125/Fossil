@@ -1100,21 +1100,181 @@ test("jumpToPublicTop returns the publicTimeline and sets publicCursor to 0 when
 
 });
 
-test('favorite returns the favorited status when successful', () async {
-  var statusesApi = MockStatusesV1Service();
-  when(statusesApi.createFavourite(statusId: anyNamed('statusId')))
-      .thenAnswer((_) async => futureMastodonResponse(
+
+group('Fossil tests for Favorite', () {
+  test('favorite returns the favorited status when successful', () async {
+    var statusesApi = MockStatusesV1Service();
+    Status favoritedStatus = dummyStatus.copyWith(isFavourited: true);
+
+    when(statusesApi.createFavourite(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
             status: HttpStatus.ok,
+            data: favoritedStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+    
+    var status = await fossil.favorite("123");
+
+    expect(status.isFavourited, isTrue);
+  });
+
+  test('favorite throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.favorite("123"), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+  test('favorite throws FossilException when status is not ok', () async {
+    var statusesApi = MockStatusesV1Service();
+    when(statusesApi.createFavourite(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.badRequest,
             data: dummyStatus,
-          ));
+            ));
 
-  var mastodon = makeMockMastodonApi(statuses: statusesApi);
-  var fossil = Fossil(replaceApi: mastodon);
-  fossil.authenticated = true;
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
 
-  var status = await fossil.favorite(dummyStatus.id);
+    expect(() async => await fossil.favorite("123"), throwsA(isA<FossilException>()));
+  });
 
-  expect(status.isFavourited, isTrue);
+  // Add more tests here
+});
+
+group('Fossil tests for unfavorite', () { 
+  test('unfavorite returns the unfavorited status when successful', () async {
+    var statusesApi = MockStatusesV1Service();
+    Status unfavoritedStatus = dummyStatus.copyWith(isFavourited: false);
+
+    when(statusesApi.destroyFavourite(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: unfavoritedStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+    
+    var status = await fossil.destroyFavorite("123");
+
+    expect(status.isFavourited, isFalse);
+  });
+
+  test('unfavorite throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.destroyFavorite("123"), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+  test('unfavorite throws FossilException when status is not ok', () async {
+    var statusesApi = MockStatusesV1Service();
+    when(statusesApi.destroyFavourite(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.badRequest,
+            data: dummyStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    expect(() async => await fossil.destroyFavorite("123"), throwsA(isA<FossilException>()));
+  });
+});
+group('Reblog', () { 
+  test('reblog returns the reblogged status when successful', () async {
+    var statusesApi = MockStatusesV1Service();
+    Status rebloggedStatus = dummyStatus.copyWith(isReblogged: true);
+
+    when(statusesApi.createReblog(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: rebloggedStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+    
+    var status = await fossil.createReblog("123");
+
+    expect(status.isReblogged, isTrue);
+  
+  });
+
+  test('reblog throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.createReblog("123"), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+  test('reblog throws FossilException when status is not ok', () async {
+    var statusesApi = MockStatusesV1Service();
+    when(statusesApi.createReblog(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.badRequest,
+            data: dummyStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    expect(() async => await fossil.createReblog("123"), throwsA(isA<FossilException>()));
+  });
+
+});
+
+group('RemoveReblog', () { 
+  test('removeReblog returns the unreblogged status when successful', () async {
+    var statusesApi = MockStatusesV1Service();
+    Status unrebloggedStatus = dummyStatus.copyWith(isReblogged: false);
+
+    when(statusesApi.destroyReblog(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: unrebloggedStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+    
+    var status = await fossil.destroyReblog("123");
+
+    expect(status.isReblogged, isFalse);
+  });
+
+  test('removeReblog throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.destroyReblog("123"), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+  test('removeReblog throws FossilException when status is not ok', () async {
+    var statusesApi = MockStatusesV1Service();
+    when(statusesApi.destroyReblog(statusId: "123"))
+        .thenAnswer((realInvocation) async => futureMastodonResponse(
+            status: HttpStatus.badRequest,
+            data: dummyStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    expect(() async => await fossil.destroyReblog("123"), throwsA(isA<FossilException>()));
+  });
+
 });
 
 
