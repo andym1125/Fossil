@@ -15,7 +15,7 @@ class ContentImage extends StatelessWidget {
           maxWidth: 400,
           maxHeight: 1000
         ),
-        child: Image.asset(imagePath)
+        child: Image(image: NetworkImage(imagePath))
       )
     );
   }

@@ -3,6 +3,8 @@
 import 'package:mastodon_api/mastodon_api.dart';
 import 'package:mockito/mockito.dart';
 
+import '../timeline_test.mocks.dart';
+
 class MockMastodonApi extends Fake implements MastodonApi {
   /// Returns the new instance of [_MastodonApi].
   MockMastodonApi({
@@ -49,9 +51,7 @@ class MockMastodonV1Service extends Fake implements MastodonV1Service {
     if(timelinesService != null) {
       timelines = timelinesService;
     }
-    if(statusesService != null) {
-      statuses = statusesService;
-    }
+    statuses = statusesService ?? MockStatusesV1Service();
   }
 
   

@@ -577,7 +577,553 @@ test("jumpToHomeTop sets homeCursor to 0 and returns the first post when home cu
   expect(response, equals(dummyStatus)); // Expect the first post
 });
 
+
+
+//Public timelines
+group('Public timelines', () {
+  
+  test("Not authenticated Unauthorized exception load old public posts", () async {
+    var timelinesApi = MockTimelinesV1Service();
+    when(timelinesApi.lookupPublicTimeline(
+          maxStatusId: anyNamed('maxStatusId'),
+          minStatusId: anyNamed('minStatusId'),
+          limit: anyNamed('limit')))
+        .thenAnswer((_) async => futureMastodonResponse(
+            data: List<Status>.generate(5, (index) => (dummyStatus),
+            )));
+
+    var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = false;
+        
+    expect(() async => await fossil.loadOldPublicPosts(), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+  test("If status is not ok new oldpublicimeline" , () async {
+
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.badRequest,
+          data: List<Status>.generate(5, (index) => (dummyStatus)),
+          ));
+          
+
+      var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+      var fossil = Fossil(replaceApi: mastodon);
+      fossil.authenticated = true;
+      
+     expect(() async => await fossil.loadOldPublicPosts(),throwsA(isA<FossilException>()));
+
+});
+
+  test("loadOldPublicPosts updates publicTimeline and returns correct number of statuses", () async {
+    var timelinesApi = MockTimelinesV1Service();
+    when(timelinesApi.lookupPublicTimeline(
+          maxStatusId: anyNamed('maxStatusId'),
+          minStatusId: anyNamed('minStatusId'),
+          limit: anyNamed('limit')))
+        .thenAnswer((_) async => futureMastodonResponse(
+            data: List<Status>.generate(5, (index) => (dummyStatus),
+            )));
+
+    var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+        
+    var result = await fossil.loadOldPublicPosts();
+    expect(result, 5);
+    expect(fossil.publicTimeline.length, 5);
+  });
+
+  //New Public Timeline
+  test("Not authenticated Unauthorized exception load new public posts", () async {
+    var timelinesApi = MockTimelinesV1Service();
+    when(timelinesApi.lookupPublicTimeline(
+          maxStatusId: anyNamed('maxStatusId'),
+          minStatusId: anyNamed('minStatusId'),
+          limit: anyNamed('limit')))
+        .thenAnswer((_) async => futureMastodonResponse(
+            data: List<Status>.generate(5, (index) => (dummyStatus),
+            )));
+
+    var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = false;
+        
+    expect(() async => await fossil.loadNewPublicPosts(), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+   test("If status is not ok new newpublicimeline" , () async {
+
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.badRequest,
+          data: List<Status>.generate(5, (index) => (dummyStatus)),
+          ));
+          
+
+      var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+      var fossil = Fossil(replaceApi: mastodon);
+      fossil.authenticated = true;
+      
+     expect(() async => await fossil.loadNewPublicPosts(),throwsA(isA<FossilException>()));
+
+  });
+
+  test("If status is ok new public timeline" , () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)),
+          ));
+          
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  
+  var response = await fossil.loadNewPublicPosts();
+  
+  expect(response, 5); // assuming that 5 new posts are returned
+});
+
+
+test("publicCursor is updated correctly when timeline is empty", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate an empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  await fossil.loadNewPublicPosts();
+
+  expect(fossil.publicCursor, 0); // Expect publicCursor to be 0
+});
+
+test("publicCursor is updated correctly when timeline is not empty", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = 0; // Set publicCursor to a value that's not cursorEmptyTimeline
+
+  await fossil.loadNewPublicPosts();
+
+  expect(fossil.publicCursor, 5); // Expect publicCursor to be incremented by the number of new statuses
+});
+
+//getPrevPublicPosts
+
+test("Not authenticated Unauthorized exception load new public posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: anyNamed('maxStatusId'),
+        minStatusId: anyNamed('minStatusId'),
+        limit: anyNamed('limit')))
+      .thenAnswer((_) async => futureMastodonResponse(
+          data: List<Status>.generate(5, (index) => (dummyStatus),
+          )));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = false;
+      
+  expect(() async => await fossil.getPrevPublicPost(), throwsA(isA<FossilUnauthorizedException>()));
+});
+test("getPrevPublicPost returns the previous post when public timeline is not empty", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+
+  // First, load new public posts
+  await fossil.loadNewPublicPosts();
+
+  // Set publicCursor to a value that's not cursorUninitialized or cursorEmptyTimeline
+  fossil.publicCursor = 1; 
+
+  // Call getPrevPublicPost and expect it to return the previous post
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the previous post
+});
+
+test("getPrevPublicPost returns null when no new posts are loaded", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate no new posts
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = 0; // Set publicCursor to 0
+
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, null); // Expect null because no new posts are loaded
+});
+
+test("getPrevPublicPost returns the first post when public cursor is at cursorEmptyTimeline", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the first post
+});
+
+test("getPrevPublicPost returns null when public cursor is at cursorEmptyTimeline and public timeline is empty", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate an empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, null); // Expect null because the timeline is empty
+});
+
+test("getPrevPublicPost returns null when public timeline is uninitialized and empty after loading new posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate an empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorUninitialized; // Set publicCursor to cursorUninitialized
+
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, null); // Expect null because the timeline is empty
+  expect(fossil.publicCursor, equals(Fossil.cursorEmptyTimeline)); // Expect publicCursor to be cursorEmptyTimeline
+});
+
+test("getPrevPublicPost returns the first post when public timeline is uninitialized and not empty after loading new posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorUninitialized; // Set publicCursor to cursorUninitialized
+
+  var response = await fossil.getPrevPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the first post
+  expect(fossil.publicCursor, equals(0)); // Expect publicCursor to be 0
+});
+
+//GetNextPublicPost
+test("getNextPublicPost throws FossilUnauthorizedException when not authenticated", () async {
+  var fossil = Fossil();
+  fossil.authenticated = false;
+
+  expect(() async => await fossil.getNextPublicPost(), throwsA(isA<FossilUnauthorizedException>()));
+});
+
+test("getNextPublicPost returns null and sets publicCursor to cursorEmptyTimeline when public timeline is uninitialized and empty after loading old posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate an empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorUninitialized; // Set publicCursor to cursorUninitialized
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, null); // Expect null because the timeline is empty
+  expect(fossil.publicCursor, equals(Fossil.cursorEmptyTimeline)); // Expect publicCursor to be cursorEmptyTimeline
+});
+
+test("getNextPublicPost returns the first post and sets publicCursor to 0 when public timeline is uninitialized and not empty after loading old posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorUninitialized; // Set publicCursor to cursorUninitialized
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the first post
+  expect(fossil.publicCursor, equals(0)); // Expect publicCursor to be 0
+});
+
+test("getNextPublicPost returns null when public timeline is empty and publicCursor is cursorEmptyTimeline after loading new posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate an empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, null); // Expect null because the timeline is empty
+});
+
+test("getNextPublicPost returns the first post and sets publicCursor to 0 when public timeline is not empty and publicCursor is cursorEmptyTimeline after loading new posts", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate a non-empty timeline
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the first post
+  expect(fossil.publicCursor, equals(0)); // Expect publicCursor to be 0
+});
+
+test("getNextPublicPost returns the next post and increments publicCursor when publicCursor is not at the end of publicTimeline", () async {
+  var mastodon = makeMockMastodonApi();
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicTimeline = List<Status>.generate(5, (index) => (dummyStatus)); // Non-empty publicTimeline
+  fossil.publicCursor = 0; // Set publicCursor to the start of publicTimeline
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, equals(dummyStatus)); // Expect the next post
+  expect(fossil.publicCursor, equals(1)); // Expect publicCursor to be incremented
+});
+
+test("getNextPublicPost returns null when publicCursor is at the end of publicTimeline and no older posts are loaded", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate no older posts
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicTimeline = List<Status>.generate(5, (index) => (dummyStatus)); // Non-empty publicTimeline
+  fossil.publicCursor = fossil.publicTimeline.length - 1; // Set publicCursor to the end of publicTimeline
+
+  var response = await fossil.getNextPublicPost();
+
+  expect(response, null); // Expect null because no older posts are loaded
+});
+
+//JumpToPublicPost
+test("jumpToPublicTop throws FossilUnauthorizedException when not authenticated", () async {
+  var fossil = Fossil();
+  fossil.authenticated = false;
+
+  expect(() async => await fossil.jumpToPublicTop(), throwsA(isA<FossilUnauthorizedException>()));
+});
+
+test("jumpToPublicTop returns an empty list and sets publicCursor to cursorEmptyTimeline when publicCursor is cursorUninitialized and no new posts are loaded", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate no new posts
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorUninitialized; // Set publicCursor to cursorUninitialized
+
+  var response = await fossil.jumpToPublicTop();
+
+  expect(response, isEmpty); // Expect an empty list because no new posts are loaded
+  expect(fossil.publicCursor, equals(Fossil.cursorEmptyTimeline)); // Expect publicCursor to be cursorEmptyTimeline
+});
+
+test("jumpToPublicTop returns an empty list when publicCursor is cursorEmptyTimeline and no new posts are loaded", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: [], // Empty list to simulate no new posts
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+
+  // Create a subclass of Fossil where loadNewPublicPosts always returns 0
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+  fossil.publicCursor = Fossil.cursorEmptyTimeline; // Set publicCursor to cursorEmptyTimeline
+
+  var response = await fossil.jumpToPublicTop();
+
+  expect(response, isEmpty); // Expect an empty list because no new posts are loaded
+});
+
+test("jumpToPublicTop returns the publicTimeline and sets publicCursor to 0 when new posts are loaded", () async {
+  var timelinesApi = MockTimelinesV1Service();
+  when(timelinesApi.lookupPublicTimeline(
+        maxStatusId: null,
+        minStatusId: null,
+        limit: 20))
+      .thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: List<Status>.generate(5, (index) => (dummyStatus)), // Non-empty list to simulate new posts
+          ));
+
+  var mastodon = makeMockMastodonApi(timelines: timelinesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+
+  var response = await fossil.jumpToPublicTop();
+
+  expect(response, equals(fossil.publicTimeline)); // Expect the publicTimeline because new posts are loaded
+  expect(fossil.publicCursor, equals(0)); // Expect publicCursor to be 0
+});
+
+
+});
+
+test('favorite returns the favorited status when successful', () async {
+  var statusesApi = MockStatusesV1Service();
+  when(statusesApi.createFavourite(statusId: anyNamed('statusId')))
+      .thenAnswer((_) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: dummyStatus,
+          ));
+
+  var mastodon = makeMockMastodonApi(statuses: statusesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+
+  var status = await fossil.favorite(dummyStatus.id);
+
+  expect(status.isFavourited, isTrue);
+});
+
+
+
 }
+
+
+
+
  
 
  
