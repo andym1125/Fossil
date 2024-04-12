@@ -1277,7 +1277,162 @@ group('RemoveReblog', () {
 
 });
 
+group('Get Post', () { 
+    test('getPost returns the expected status', () async {
+    var statusesApi = MockStatusesV1Service();
+    var expectedStatus = dummyStatus;
 
+    when(statusesApi.lookupStatus(statusId: anyNamed('statusId')))
+        .thenAnswer((_) async => futureMastodonResponse(
+              status: HttpStatus.ok,
+              data: expectedStatus,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    var status = await fossil.getPost('123');
+
+    expect(status, equals(expectedStatus));
+    });
+
+    test('getPost throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.getPost('123'), throwsA(isA<FossilUnauthorizedException>()));
+    });
+});
+
+group('Create post', () { 
+    test('createPost returns the expected status', () async {
+    var statusesApi = MockStatusesV1Service();
+    var expectedStatus = dummyStatus;
+
+    when(statusesApi.createStatus(
+      text: anyNamed('text'),
+      spoilerText: anyNamed('spoilerText'),
+      inReplyToStatusId: anyNamed('inReplyToStatusId'),
+      sensitive: anyNamed('sensitive'),
+      visibility: anyNamed('visibility'),
+      language: anyNamed('language'),
+      mediaIds: anyNamed('mediaIds'),
+      poll: anyNamed('poll'),
+    )).thenAnswer((_) async => futureMastodonResponse(
+          status: HttpStatus.ok,
+          data: expectedStatus,
+        ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    var status = await fossil.createPost(text: 'Test post');
+
+    expect(status, equals(expectedStatus));
+  });
+
+  test('createPost throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.createPost(text: 'Test post'), throwsA(isA<FossilUnauthorizedException>()));
+  });
+});
+
+group('Get ancestors', () { 
+
+  test('getAncestors returns the expected ancestors', () async {
+  var statusesApi = MockStatusesV1Service();
+  var expectedStatus = dummyStatus;
+  var context = StatusContext(ancestors: [expectedStatus], descendants: []);
+
+  when(statusesApi.lookupStatusContext(statusId: anyNamed('statusId')))
+      .thenAnswer((_) async => futureMastodonResponse(
+            status: HttpStatus.ok,
+            data: context,
+          ));
+
+  var mastodon = makeMockMastodonApi(statuses: statusesApi);
+  var fossil = Fossil(replaceApi: mastodon);
+  fossil.authenticated = true;
+
+  var ancestors = await fossil.getAncestors('123');
+
+  expect(ancestors, equals([expectedStatus]));
+});
+
+  test('getAncestors throws FossilUnauthorizedException when not authenticated', () async {
+    var fossil = Fossil();
+    fossil.authenticated = false;
+
+    expect(() async => await fossil.getAncestors('123'), throwsA(isA<FossilUnauthorizedException>()));
+  });
+
+});
+
+group('Get replies', () { 
+
+  test('getReplies returns the expected replies', () async {
+    var statusesApi = MockStatusesV1Service();
+    var expectedStatus = dummyStatus;
+    var context = StatusContext(ancestors: [], descendants: [expectedStatus]);
+
+    when(statusesApi.lookupStatusContext(statusId: anyNamed('statusId')))
+        .thenAnswer((_) async => futureMastodonResponse(
+              status: HttpStatus.ok,
+              data: context,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    var replies = await fossil.getReplies('123');
+
+    expect(replies, equals([expectedStatus]));
+  });
+  
+    test('getReplies throws FossilUnauthorizedException when not authenticated', () async {
+      var fossil = Fossil();
+      fossil.authenticated = false;
+  
+      expect(() async => await fossil.getReplies('123'), throwsA(isA<FossilUnauthorizedException>()));
+    });
+
+});
+
+group('Get direct replies', () { 
+
+    test('getDirectReplies returns the expected replies', () async {
+    var statusesApi = MockStatusesV1Service();
+    var expectedStatus = dummyStatus.copyWith(inReplyToId: '123');
+    var context = StatusContext(ancestors: [], descendants: [expectedStatus, dummyStatus]);
+
+    when(statusesApi.lookupStatusContext(statusId: anyNamed('statusId')))
+        .thenAnswer((_) async => futureMastodonResponse(
+              status: HttpStatus.ok,
+              data: context,
+            ));
+
+    var mastodon = makeMockMastodonApi(statuses: statusesApi);
+    var fossil = Fossil(replaceApi: mastodon);
+    fossil.authenticated = true;
+
+    var replies = await fossil.getDirectReplies('123');
+
+    expect(replies, equals([expectedStatus]));
+  });
+  
+    test('getDirectReplies throws FossilUnauthorizedException when not authenticated', () async {
+      var fossil = Fossil();
+      fossil.authenticated = false;
+  
+      expect(() async => await fossil.getDirectReplies('123'), throwsA(isA<FossilUnauthorizedException>()));
+    });
+
+});
 
 }
 
