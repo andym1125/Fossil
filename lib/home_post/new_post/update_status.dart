@@ -46,8 +46,8 @@ class _NewPostState extends State<NewPost> {
         padding: const EdgeInsets.all(5.0),
         child: Column(
           children: <Widget>[
-            const ProfilePic(imageProvider: 'images/profile_pic.png'),
-            const UserNames(userName: 'Aryan_Patel', displayName: 'Aryan Patel'),
+            const ProfilePic(imageProvider: 'https://mastodon.andymcdowall.com/system/accounts/avatars/111/378/080/763/125/197/original/5b46021123ce8570.png'),
+            const UserNames(userName: 'admin', displayName: 'Fossil'),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(

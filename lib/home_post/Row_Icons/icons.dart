@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fossil/fossil.dart';
+import 'package:fossil/single_post/single_post.dart';
+import 'package:fossil/home_post/post_class.dart';
 
 class IconsList extends StatefulWidget {
 
@@ -9,8 +11,9 @@ class IconsList extends StatefulWidget {
   final bool isReblogged;
   final Fossil fossil;
   final int repliesCount;
+  final Post post;
 
-  const IconsList({super.key, required this.fossil, required this.isFavourited, required this.id, required this.reblogsCount, required this.isReblogged, required this.repliesCount});
+  const IconsList({super.key, required this.fossil, required this.isFavourited, required this.id, required this.reblogsCount, required this.isReblogged, required this.repliesCount, required this.post});
 
   @override
   State<IconsList> createState() => _IconsListState();
@@ -79,7 +82,10 @@ class _IconsListState extends State<IconsList> {
       children: <Widget>[
         IconButton(
           onPressed: () {
-
+            Navigator.push (
+              context,
+              MaterialPageRoute(builder: (context) => SinglePost(fossil: widget.fossil, post: widget.post))
+            );
           }, 
           icon: widget.repliesCount > 0
             ? Row(

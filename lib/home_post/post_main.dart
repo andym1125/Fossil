@@ -83,6 +83,9 @@ class _PostClassState extends State<PostClass> {
               const SizedBox(height: 15),
             ];
 
+            debugPrint(posts[index].profilePic);
+            debugPrint(posts[index].userName);
+
             if (posts[index].content != null && posts[index].content!.isNotEmpty) {
               children.add(ContentText(content: posts[index].content!));
             }
@@ -94,7 +97,7 @@ class _PostClassState extends State<PostClass> {
             if (index >= 0) {
               children.add(const SizedBox(height: 10));
             }
-             children.add(IconsList(fossil: widget.fossil, isFavourited: posts[index].isFavourited, id: posts[index].id, reblogsCount: posts[index].reblogsCount, isReblogged: posts[index].isReblogged, repliesCount: posts[index].repliesCount));
+             children.add(IconsList(fossil: widget.fossil, isFavourited: posts[index].isFavourited, id: posts[index].id, reblogsCount: posts[index].reblogsCount, isReblogged: posts[index].isReblogged, repliesCount: posts[index].repliesCount, post: posts[index]));
 
             return GestureDetector(
               onTap: () {

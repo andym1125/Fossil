@@ -78,7 +78,7 @@ class _SinglePostStates extends State<SinglePost> {
               if (index == 0) const SizedBox(height: 10),
 
 
-              IconsList(fossil: widget.fossil, isFavourited: posts[index].isFavourited, id: posts[index].id, reblogsCount: posts[index].reblogsCount, isReblogged: posts[index].isReblogged, repliesCount: posts[index].repliesCount),
+              IconsList(fossil: widget.fossil, isFavourited: posts[index].isFavourited, id: posts[index].id, reblogsCount: posts[index].reblogsCount, isReblogged: posts[index].isReblogged, repliesCount: posts[index].repliesCount, post: posts[index]),
               if (index == 0) const Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Divider()),
               if (index == 0) const SizedBox(height: 10),
               if (index != 0) const Divider(),

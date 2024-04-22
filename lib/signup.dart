@@ -47,9 +47,12 @@ class _SignupPageState extends State<SignupPageState> {
         // elevation: 0,
       ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: ListView(
+        padding: const EdgeInsets.all(8),
         children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
 
           // Username, emailAddress, password text box
           Column(
@@ -110,11 +113,14 @@ class _SignupPageState extends State<SignupPageState> {
               )
             ]
           ),
+          const SizedBox(
+            height: 16,
+          ),
 
           // next Button
           SizedBox(
               height: 48.0,
-              width: 370.0,
+              width: 350.0,
               child: ElevatedButton(
                   onPressed: () async {
                     String username = userName.text;
@@ -163,7 +169,7 @@ class _SignupPageState extends State<SignupPageState> {
                           borderRadius: BorderRadius.circular(20),
                           side: const BorderSide(color: Color(0xFF211C4E))
                       ),
-                      backgroundColor: Colors.white
+                      backgroundColor: Colors.white,
                   ),
                   child: const Text(
                       'next',
@@ -181,6 +187,8 @@ class _SignupPageState extends State<SignupPageState> {
           Text(errorText, style: const TextStyle(color: Colors.red))
         ]
       ),
+        ],
+      )
     );
   }
 
