@@ -6,8 +6,9 @@ import 'package:fossil/fossil.dart';
 class NewPost extends StatefulWidget {
 
   final Fossil fossil;
+  final String? id;
 
-  const NewPost({super.key, required this.fossil});
+  const NewPost({super.key, required this.fossil, this.id});
 
   @override
   State<NewPost> createState() => _NewPostState();
@@ -30,9 +31,17 @@ class _NewPostState extends State<NewPost> {
           TextButton.icon(
             onPressed: () {
               if (newText != null && newText!.isNotEmpty) {
-                widget.fossil.createPost(
-                  text: newText!,
-                );
+                if (widget.id != null) {
+                  widget.fossil.createPost(
+                    text: newText!,
+                    inReplyToStatusId: widget.id,
+                  );
+                }
+                else {
+                  widget.fossil.createPost(
+                    text: newText!,
+                  );
+                }
                 Navigator.pop(context);
               }
             }, 
