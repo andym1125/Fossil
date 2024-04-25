@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fossil/home_post/profile_pic.dart';
 import 'fossil.dart';
 // import 'package:mastodon_api/mastodon_api.dart' as m;
 import 'home_drawer/drawer_list.dart';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       body: PostClass(fossil: widget.fossil, scrollController: _scrollController),
 
       floatingActionButton: FloatingActionButton(
-
+        
         onPressed: () /*async*/ {
           Navigator.push(
             context,
@@ -124,17 +125,16 @@ class _HomePageState extends State<HomePage> {
                 icon: const Icon(Icons.home_rounded),
                 onPressed: _scrollToTop
               ),
-
-              IconButton(
-                tooltip: 'OpenProfile',
-                icon: const Icon(Icons.person),
-                onPressed: () {
+              
+              GestureDetector(
+                onTap:() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProfilePage())
+                    MaterialPageRoute(builder: (context) => const ProfilePage(imageProvider: ''))
                   );
-                }
-              ),
+                },
+                child: const ProfilePic(imageProvider: 'https://mastodon.andymcdowall.com/system/accounts/avatars/111/378/080/763/125/197/original/5b46021123ce8570.png'),
+              )
             ],
           )
         )
